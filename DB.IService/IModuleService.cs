@@ -1,0 +1,22 @@
+﻿using DB.Entity.Model;
+using DB.Entity.Response;
+using System;
+using System.Threading.Tasks;
+
+namespace DB.IService
+{
+    public interface IModuleService
+    {
+        /// <summary>
+        /// 查询全部模块
+        /// </summary>
+        /// <returns></returns>
+        Task<BaseResult<ModuleEntity>> Query();
+        /// <summary>
+        /// 根据角色信息查询模块
+        /// </summary>
+        /// <param name="guids">模块ID集合</param>
+        /// <returns></returns>
+        Task<BaseResult<ModuleEntity>> QueryInId(Guid[] moduleId);
+    }
+}

@@ -1,0 +1,29 @@
+﻿.TableStyle {
+    background: #00CCCC;
+    width: 230px;
+    height: 100px;
+    margin-left: 60%;
+    margin-top: 10%;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.FontStyle {
+    font-size: 12px;
+    text-align: right
+}
+
+.TextboxStyle {
+    margin: 5px 5px 5px 5px;
+}
+
+.VailidImg {
+    width: 90px;
+    height: 19px;
+    margin: 5px 5px 5px 5px;
+}
+
+.Create {
+    background: #FFFFFF;
+    color: #000079
+}

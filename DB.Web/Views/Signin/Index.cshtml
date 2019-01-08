@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewData["Title"] = "Login";
+}
+
+
+<link href="~/css/login/index.css" rel="stylesheet" />
+<script src="~/js/jquery.js"></script>
+<script src="~/js/script/signin/index.js"></script>
+
+
+<div>
+    <table class="TableStyle">
+        <tr>
+            <td class="FontStyle"> 账号:</td>
+            <td>
+                <input type="text" id="text_userAccount" class="TextboxStyle" />
+            </td>
+        </tr>
+        <tr>
+            <td class="FontStyle">  密码: </td>
+            <td>
+                <input type="password" id="text_userPasword" class="TextboxStyle" />
+            </td>
+        </tr>
+        <tr>
+            <td class="FontStyle"> 验证码: </td>
+            <td>
+                <input type="text" value="" id="text_verificationcode" class="VailidImg" />
+                <span id="checkCode" class="Create"></span>
+
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="button" id="login" value="登陆" />
+            </td>
+        </tr>
+    </table>
+</div>
