@@ -224,12 +224,12 @@ namespace DB.Service
                 }
                 else
                 {
-                    return new BaseResult<bool>("用户添加失败！",false);
+                    return new BaseResult<bool>("用户添加失败！", false);
                 }
             }
             else
             {
-                return new BaseResult<bool>("用户已存在，请重新注册!",false);
+                return new BaseResult<bool>("用户已存在，请重新注册!", false);
             }
 
 
@@ -245,41 +245,39 @@ namespace DB.Service
             //判断当前数据是否在审核状态，审核中不可修改
             if (userEntity.WorkflowStatus != WorkflowStatus.ApprovalToBeAudited)
             {
-                Expression<Func<UserEntity, bool>> where = LinqUtil.True<UserEntity>();
-                where = where.AndAlso(e => e.Id == userEntity.Id);
-                var _userentity = await _userRepository.GetAsync(where);
-                _userentity.UpdateTime = DateTime.Now;
-                _userentity.UserName = userEntity.UserName;
-                _userentity.UserPassword = userEntity.UserPassword;
-                _userentity.PhoneNumber = userEntity.PhoneNumber;
-                _userentity.Mail = userEntity.Mail;
-                //判断返回内容
-                if (await _userRepository.UpdateAsync(_userentity))
-                {
-                    return new BaseResult<bool>("用户更新成功！");
-                }
-                else
-                {
-                    return new BaseResult<bool>("用户更新失败！");
-                }
+                return new BaseResult<bool>("当前数据审核中不可修改！");
             }
-            return new BaseResult<bool>("当前数据审核中不可修改！");
+            Expression<Func<UserEntity, bool>> where = LinqUtil.True<UserEntity>();
+            where = where.AndAlso(e => e.Id == userEntity.Id);
+            var _userentity = await _userRepository.GetAsync(where);
+            _userentity.UpdateTime = DateTime.Now;
+            _userentity.UserName = userEntity.UserName;
+            _userentity.UserPassword = userEntity.UserPassword;
+            _userentity.PhoneNumber = userEntity.PhoneNumber;
+            _userentity.Mail = userEntity.Mail;
+            //判断返回内容
+            if (await _userRepository.UpdateAsync(_userentity))
+            {
+                return new BaseResult<bool>("用户更新成功！");
+            }
+            else
+            {
+                return new BaseResult<bool>("用户更新失败！");
+            }
         }
 
         /// <summary>
         /// 用户删除
         /// </summary>
-        /// <param name="guid"></param>
+        /// <param name="obj"></param>
         /// <returns></returns>
-        public async Task<BaseResult<bool>> DelUserId(Guid guid)
+        public async Task<BaseResult<bool>> DelUserId(string obj)
         {
-            if (_httpContextUtil.GetObjectAsJson<UserEntity>(KeyUtil.user_info).Id != guid)
+            List<UserEntity> userListEntity = JsonNetHelper.DeserializeObject<List<UserEntity>>(obj);
+            var ser = userListEntity.Where(e => e.Id == _httpContextUtil.GetObjectAsJson<UserEntity>(KeyUtil.user_info).Id);
+            if (ser.Count() == 0)
             {
-                UserEntity _userEntity = new UserEntity()
-                {
-                    Id = guid
-                };
-                var total = await _userRepository.DeleteAsync(_userEntity);
+                var total = await _userRepository.DeleteListAsync(userListEntity);
                 if (total)
                 {
                     return new BaseResult<bool>("删除用户成功！");

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DB.Entity.Model;
 using DB.IService;
@@ -56,11 +57,11 @@ namespace DB.Web.Controllers
         /// <summary>
         /// 删除用户
         /// </summary>
-        /// <param name="guid"></param>
+        /// <param name="obj"></param>
         /// <returns></returns>
-        public async Task<IActionResult> DelUserId(Guid guid)
+        public async Task<IActionResult> DelUserId(string obj)
         {
-            return Json(await _usersService.DelUserId(guid));
+            return Json(await _usersService.DelUserId(obj));
         }
         /// <summary>
         /// 更改用户状态

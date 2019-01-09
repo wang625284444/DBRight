@@ -1,6 +1,7 @@
 ﻿using DB.Entity.Model;
 using DB.Entity.Response;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using static DB.Entity.Enum.UserEnum;
@@ -51,11 +52,11 @@ namespace DB.IService
         /// <returns></returns>
         Task<BaseResult<bool>> ModifyUser(UserEntity userEntity);
         /// <summary>
-        /// 删除用户
+        /// 批量删除用户
         /// </summary>
-        /// <param name="guid"></param>
+        /// <param name="obj"></param>
         /// <returns></returns>
-        Task<BaseResult<bool>> DelUserId(Guid guid);
+        Task<BaseResult<bool>> DelUserId(string obj);
         /// <summary>
         /// 更改用户状态
         /// </summary>
