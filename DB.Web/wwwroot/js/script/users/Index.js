@@ -4,12 +4,29 @@
         items: [{
             //tbar第一行工具栏
             xtype: "toolbar",
-            width: 1100,//宽度
+            width: 1116,//宽度
             items: [{
+                id: 'text_UserNumber',
+                fieldLabel: '用户编码',
+                labelWidth: 60,
+                xtype: 'textfield',
+                width: 200
+            }, {
+                    id:'text_',
                 fieldLabel: '用户账号',
                 labelWidth: 60,
                 xtype: 'textfield',
-                width: 240
+                width: 200
+            }, {
+                fieldLabel: '用户名称',
+                labelWidth: 60,
+                xtype: 'textfield',
+                width: 200
+            }, {
+                fieldLabel: '审批状态',
+                labelWidth: 60,
+                xtype: 'textfield',
+                width: 200
             }, {
                 xtype: 'button',
                 text: '查询',
