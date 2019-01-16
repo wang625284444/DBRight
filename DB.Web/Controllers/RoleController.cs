@@ -12,13 +12,13 @@ namespace DB.Web.Controllers
 {
     public class RoleController : DBController
     {
-        public IRoleModuleService _roleModuleEntity { get; private set; }
+        public IRoleModuleService _roleModuleService { get; private set; }
         public IRoleService _roleService { get; private set; }
 
-        public RoleController(IRoleService roleService, IRoleModuleService roleModuleEntity)
+        public RoleController(IRoleService roleService, IRoleModuleService roleModuleService)
         {
             this._roleService = roleService;
-            this._roleModuleEntity = roleModuleEntity;
+            this._roleModuleService = roleModuleService;
         }
         public IActionResult Index()
         {
@@ -32,7 +32,7 @@ namespace DB.Web.Controllers
         public async Task<IActionResult> GetQuery()
         {
             var user = getUserSession();
-            var list = await _roleModuleEntity.GetQuery(user.Id);
+            var list = await _roleModuleService.QueryById(user.Id);
             string json = JsonNetHelper.SerializeObject(list);
             return Json(json);
         }
@@ -41,14 +41,38 @@ namespace DB.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> Query()
+        public async Task<ActionResult> QueryRole(RoleEntity roleEntity, int page, int limit)
         {
-            var list = await _roleService.Query();
-            string json = JsonNetHelper.SerializeObject(list);
-            return Json(json);
+            return Json(await _roleService.QueryRole(roleEntity, page, limit));
+        }
+        /// <summary>
+        /// 查询Id和RoleName信息
+        /// </summary>
+        /// <param name="roleName"></param>
+        /// <returns></returns>
+        public async Task<ActionResult> QueryRoleEffective(string roleName)
+        {
+            var list = await _roleService.QueryRoleEffective();
+            return Json(list.data.Select(x => new { x.Id, x.RoleName, x.Pid }));
+        }
+        /// <summary>
+        /// 添加角色信息
+        /// </summary>
+        /// <param name="roleEntity"></param>
+        /// <returns></returns>
+        public async Task<ActionResult> AddRole(RoleEntity roleEntity)
+        {
+            return Json(await _roleService.AddRole(roleEntity));
         }
 
-
-
+        /// <summary>
+        /// 删除角色
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public async Task<ActionResult> DelRoleId(string obj)
+        {
+            return Json(await _roleService.DelRoleId(obj));
+        }
     }
 }

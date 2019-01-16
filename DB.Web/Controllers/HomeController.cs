@@ -34,41 +34,32 @@ namespace DB.Web.Controllers
             //根据用户获取角色
             var _roleList = await _roleService.QueryById();
             //根据角色获取权限
-            var _roleModul = await _roleModuleService.GetQuery(_roleList.data.Id);
-            //将要角色数据转换成数组
+            var _roleModul = await _roleModuleService.QueryById(_roleList.data.Id);
+            //将角色数据转换成数组
             var _rolemodelList = _roleModul.data.Select(x => x.ModuleId).ToArray();
             //根据角色获取的权限信息查找权限
-            var _userlist = await _moduleService.QueryInId(_rolemodelList);
+            var _modulelist = await _moduleService.QueryInId(_rolemodelList);
             Guid guid = new Guid("00000000-0000-0000-0000-000000000000");
             //装载tree数据集合
-            List<TreeModels> treelist = new List<TreeModels>();
-            List<Children> childrenlist = new List<Children>();
+            List<HomeModels> treelist = new List<HomeModels>();
+            List<HomeChildren> childrenlist = new List<HomeChildren>();
             //获取集合中的父级数据
-            var _listtree = _userlist.dataList.Where(e => e.Pid == guid).ToList();
+            var _listtree = _modulelist.dataList.Where(e => e.Pid == guid).ToList();
             //将父级数据写入TreeModel模型
             foreach (var item in _listtree)
             {
-                TreeModels tree = new TreeModels();
-                //tree.id = item.Id;
+                HomeModels tree = new HomeModels();
                 tree.leaf = false;
                 tree.text = item.UrlName;
                 tree.data = "";
-                //tree.parentId = item.Pid;
-                var _listchildren = _userlist.dataList.Where(e => e.Pid == item.Id).ToList();
+                var _listchildren = _modulelist.dataList.Where(e => e.Pid == item.Id).ToList();
                 foreach (var Listchil in _listchildren)
                 {
-                    Children children = new Children();
+                    HomeChildren children = new HomeChildren();
                     children.id = Listchil.Id;
                     children.leaf = true;
                     children.text = Listchil.UrlName;
-                    //children.data = "<iframe width='100%' height='100%' frameborder='0'  src=" + Listchil.Url + " style='width:100%;height:100%;margin:0px 0px;'></iframe>";
                     children.url = Listchil.Url;
-                    //if (Listchil.Url != null)
-                    //{
-                    //    Attributes attr = new Attributes();
-                    //    attr.url = "<iframe width='100%' height='100%' frameborder='0'  src=" + Listchil.Url + " style='width:100%;height:100%;margin:0px 0px;'></iframe>";
-                    //    children.attributes = attr;
-                    //}
                     childrenlist.Add(children);
                 }
                 tree.children = childrenlist;

@@ -9,7 +9,7 @@ namespace DB.Entity.Assistance
         /// <summary>
         /// 数据状态
         /// </summary>
-        public bool IsStatus { get; set; }
+        public bool IsStatus { get; set; } = true;
         /// <summary>
         /// 创建时间/只读
         /// </summary>

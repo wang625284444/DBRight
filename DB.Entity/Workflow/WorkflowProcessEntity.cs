@@ -14,11 +14,11 @@ namespace DB.Entity.Workflow
         /// </summary>
         public Guid Id { get; set; }
         /// <summary>
-        /// 顺序
+        /// 审核顺序
         /// </summary>
         public long Sequence { get; set; }
         /// <summary>
-        /// 顺序名称
+        /// 审核顺序名称
         /// </summary>
         public string SequenceName { get; set; }
         /// <summary>

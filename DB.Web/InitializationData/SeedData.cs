@@ -51,6 +51,7 @@ namespace DB.Web.InitializationData
                          {
                              Id = Guid.NewGuid(),
                              RoleName = "高级管理员",
+                             Pid=new Guid("00000000-0000-0000-0000-000000000000")
                          });
                     var module1 = context.T_Module.Add(
                         new ModuleEntity

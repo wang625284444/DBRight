@@ -23,48 +23,7 @@
             expanded: true
         }
     });
-
-    Ext.define('MyApp.view.layout.SystemMenuView', {
-        extend: 'Ext.button.Button',
-        xtype: 'app-systemmenu',
-        text: '系统菜单',
-        iconCls: 'icon-windows',
-        initComponent: function () {
-            var me = this;
-            me.menu = [{
-                text: '系统信息',
-                iconCls: 'icon-about',
-                handler: function () {
-                    Ext.Msg.alert('提示', '该功能暂未开放');
-                }
-            }, '-',
-            {
-                text: '修改密码',
-                iconCls: 'icon-password',
-                handler: function () {
-                    Ext.Msg.alert('提示', '该功能暂未开放');
-                }
-            }, '-',
-            {
-                text: '锁定屏幕',
-                iconCls: 'icon-lock',
-                handler: function () {
-                    Ext.Msg.alert('提示', '该功能暂未开放');
-                    /*seller.app.lock();
-                    Ext.util.Cookies.set('lockFlag', true);*/
-                }
-            }, '-',
-            {
-                text: '退出登陆',
-                iconCls: 'icon-logout',
-                handler: function () {
-                    Ext.Msg.alert('提示', '该功能暂未开放');
-                }
-            }];
-            me.callParent(arguments);
-        }
-    });
-
+    
     var tabpanel = Ext.create('Ext.tab.Panel', {
         id: 'myTabPanel',
         width: 1166,
@@ -135,7 +94,7 @@
             frame: true
         },
         items: [
-            { region: "north", height: 100, split: false, border: false, },//头部
+            { region: "north", height: 100, split: false, border: false },//头部
             { region: "west", width: 200, xtype: 'treepanel', title: '菜单' },//左侧
             { region: "center", xtype: tabpanel }//中间
         ]

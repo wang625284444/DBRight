@@ -25,6 +25,6 @@ namespace DB.Entity
         /// <summary>
         /// 审批状态
         /// </summary>
-        public WorkflowStatus WorkflowStatus { get; set; }
+        public WorkflowStatus? WorkflowStatus { get; set; }
     }
 }

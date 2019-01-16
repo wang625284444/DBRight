@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DB.Entity.Migrations
 {
     [DbContext(typeof(BaseDbContext))]
-    [Migration("20190108142302_Initial")]
+    [Migration("20190113151659_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,7 +44,7 @@ namespace DB.Entity.Migrations
 
                     b.Property<DateTime>("WorkflowCreationTime");
 
-                    b.Property<int>("WorkflowStatus");
+                    b.Property<int?>("WorkflowStatus");
 
                     b.Property<DateTime>("WorkflowTime");
 
@@ -64,6 +64,8 @@ namespace DB.Entity.Migrations
 
                     b.Property<bool>("IsStatus");
 
+                    b.Property<Guid>("Pid");
+
                     b.Property<string>("RoleName");
 
                     b.Property<DateTime>("UpdateTime");
@@ -72,7 +74,7 @@ namespace DB.Entity.Migrations
 
                     b.Property<DateTime>("WorkflowCreationTime");
 
-                    b.Property<int>("WorkflowStatus");
+                    b.Property<int?>("WorkflowStatus");
 
                     b.Property<DateTime>("WorkflowTime");
 
@@ -102,7 +104,7 @@ namespace DB.Entity.Migrations
 
                     b.Property<DateTime>("WorkflowCreationTime");
 
-                    b.Property<int>("WorkflowStatus");
+                    b.Property<int?>("WorkflowStatus");
 
                     b.Property<DateTime>("WorkflowTime");
 
@@ -146,7 +148,7 @@ namespace DB.Entity.Migrations
 
                     b.Property<DateTime>("WorkflowCreationTime");
 
-                    b.Property<int>("WorkflowStatus");
+                    b.Property<int?>("WorkflowStatus");
 
                     b.Property<DateTime>("WorkflowTime");
 
@@ -176,7 +178,7 @@ namespace DB.Entity.Migrations
 
                     b.Property<DateTime>("WorkflowCreationTime");
 
-                    b.Property<int>("WorkflowStatus");
+                    b.Property<int?>("WorkflowStatus");
 
                     b.Property<DateTime>("WorkflowTime");
 

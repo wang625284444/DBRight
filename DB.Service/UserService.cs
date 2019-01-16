@@ -180,10 +180,18 @@ namespace DB.Service
             {
                 where = where.AndAlso(e => e.UserNumber == userEntity.UserNumber);
             }
-            //if (userEntity.Status == StatusEnum.Normal)
-            //{
-            //    where = where.AndAlso(e => e.Status == userEntity.Status);
-            //}
+            if (userEntity.UserName != null)
+            {
+                where = where.AndAlso(e => e.UserName == userEntity.UserName);
+            }
+            if (userEntity.UserAccount != null)
+            {
+                where = where.AndAlso(e => e.UserAccount == userEntity.UserAccount);
+            }
+            if (userEntity.WorkflowStatus != null)
+            {
+                where = where.AndAlso(e => e.WorkflowStatus == userEntity.WorkflowStatus);
+            }
 
             var total = await _userRepository.CountAsync(where);
             IQueryable<UserEntity> list = await _userRepository.GetPageAllAsync<UserEntity, DateTime, UserEntity>(pageIndex, pageSize, where, c => c.CreationTime, null);
@@ -196,9 +204,8 @@ namespace DB.Service
         /// <returns>用户编码</returns>
         public async Task<Pager<string>> QueryUserNumber()
         {
-            //    Expression<Func<UsersEntity, bool>> where = LinqUtil.True<UsersEntity>();
-            //    where.AndAlso(e => e.UserNumber.Max());
-            //    var total = await userRepository.GetAsync(where);
+            Expression<Func<UserEntity, bool>> where = LinqUtil.True<UserEntity>();
+            var total = await _userRepository.GetAsync(where);
             return new Pager<string>(100, "");
         }
 
@@ -210,15 +217,11 @@ namespace DB.Service
         public async Task<BaseResult<bool>> AddUser(UserEntity userEntity)
         {
             Expression<Func<UserEntity, bool>> where = LinqUtil.True<UserEntity>();
-            //根据账号获取用户信息
             where = where.AndAlso(e => e.UserAccount == userEntity.UserAccount);
-            bool _userEntity = await _userRepository.IsExistAsync(where);
-            //验证用户是否存在
-            if (_userEntity == false)
+            if (!await _userRepository.IsExistAsync(where))
             {
-                bool AddType = await _userRepository.AddAsync(userEntity);
-                //判断是否添加成功
-                if (AddType == true)
+                userEntity.WorkflowStatus = WorkflowStatus.ApprovalNotSubmitted;
+                if (await _userRepository.AddAsync(userEntity))
                 {
                     return new BaseResult<bool>("用户添加成功！");
                 }
@@ -231,8 +234,6 @@ namespace DB.Service
             {
                 return new BaseResult<bool>("用户已存在，请重新注册!", false);
             }
-
-
         }
 
         /// <summary>
