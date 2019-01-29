@@ -60,7 +60,7 @@ namespace DB.Service
         {
             var usersEntity = _httpContextUtil.GetObjectAsJson<UserEntity>(KeyUtil.user_info);
             Expression<Func<RoleEntity, bool>> where = LinqUtil.True<RoleEntity>();
-            where = where.AndAlso(e => e.IsStatus == false || e.Id == usersEntity.Id);
+            where = where.AndAlso(e => e.IsStatus == true || e.Id == usersEntity.Id);
             var _rolelist = await _roleRepository.GetAsync(where);
             if (_rolelist != null)
             {
@@ -76,12 +76,12 @@ namespace DB.Service
         /// <returns></returns>
         public async Task<BaseResult<RoleEntity>> QueryById(Guid guid)
         {
-            var usersEntity = _httpContextUtil.GetObjectAsJson<UserEntity>(KeyUtil.user_info);
             Expression<Func<RoleEntity, bool>> where = LinqUtil.True<RoleEntity>();
-            where = where.AndAlso(e => e.IsStatus == false || e.Id == usersEntity.Id);
+            where = where.AndAlso(e => e.IsStatus == false || e.Id == guid);
             var _rolelist = await _roleRepository.GetAsync(where);
             return new BaseResult<RoleEntity>(_rolelist);
         }
+
         /// <summary>
         /// 添加角色信息
         /// </summary>

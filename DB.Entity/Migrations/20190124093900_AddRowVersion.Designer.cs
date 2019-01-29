@@ -4,36 +4,22 @@ using DB.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DB.Entity.Migrations
 {
     [DbContext(typeof(BaseDbContext))]
-    partial class BaseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190124093900_AddRowVersion")]
+    partial class AddRowVersion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("DB.Entity.Model.ModuleButtionEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("ButtionName");
-
-                    b.Property<Guid>("ModuleId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ModuleId");
-
-                    b.ToTable("T_ModuleButtion");
-                });
 
             modelBuilder.Entity("DB.Entity.Model.ModuleEntity", b =>
                 {
@@ -166,11 +152,11 @@ namespace DB.Entity.Migrations
 
                     b.Property<bool>("IsStatus");
 
-                    b.Property<Guid>("RoleId");
+                    b.Property<Guid?>("RoleId");
 
                     b.Property<DateTime>("UpdateTime");
 
-                    b.Property<Guid>("UserId");
+                    b.Property<Guid?>("UserId");
 
                     b.Property<string>("WorkflowApprover");
 
@@ -237,14 +223,6 @@ namespace DB.Entity.Migrations
                     b.ToTable("T_WorkflowProcess");
                 });
 
-            modelBuilder.Entity("DB.Entity.Model.ModuleButtionEntity", b =>
-                {
-                    b.HasOne("DB.Entity.Model.ModuleEntity", "Module")
-                        .WithMany()
-                        .HasForeignKey("ModuleId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("DB.Entity.Model.RoleModuleEntity", b =>
                 {
                     b.HasOne("DB.Entity.Model.ModuleEntity", "Module")
@@ -262,13 +240,11 @@ namespace DB.Entity.Migrations
                 {
                     b.HasOne("DB.Entity.Model.RoleEntity", "Role")
                         .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("RoleId");
 
                     b.HasOne("DB.Entity.Model.UserEntity", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("DB.Entity.Workflow.WorkflowProcessEntity", b =>

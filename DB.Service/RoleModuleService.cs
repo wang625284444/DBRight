@@ -62,5 +62,25 @@ namespace DB.Service
                 return new BaseResult<bool>("模块保存失败！", false);
             }
         }
+
+        /// <summary>
+        /// 根据角色删除全部权限关系
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <returns></returns>
+        public async Task<BaseResult<bool>> DelModuleList(Guid guid)
+        {
+            Expression<Func<RoleModuleEntity, bool>> where = LinqUtil.True<RoleModuleEntity>();
+            where = where.AndAlso(e => e.RoleId == guid);
+            var roleModuleEntities = await _roleModuleRepository.GetAllAsync(where);
+            if (await _roleModuleRepository.DeleteListAsync(roleModuleEntities.ToList()))
+            {
+                return new BaseResult<bool>("删除用户成功！");
+            }
+            else
+            {
+                return new BaseResult<bool>("删除用户操作失败！");
+            }
+        }
     }
 }

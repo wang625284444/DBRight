@@ -4,14 +4,16 @@ using DB.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DB.Entity.Migrations
 {
     [DbContext(typeof(BaseDbContext))]
-    partial class BaseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190128034957_Add-DBRight2")]
+    partial class AddDBRight2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -166,11 +168,11 @@ namespace DB.Entity.Migrations
 
                     b.Property<bool>("IsStatus");
 
-                    b.Property<Guid>("RoleId");
+                    b.Property<Guid?>("RoleId");
 
                     b.Property<DateTime>("UpdateTime");
 
-                    b.Property<Guid>("UserId");
+                    b.Property<Guid?>("UserId");
 
                     b.Property<string>("WorkflowApprover");
 
@@ -262,13 +264,11 @@ namespace DB.Entity.Migrations
                 {
                     b.HasOne("DB.Entity.Model.RoleEntity", "Role")
                         .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("RoleId");
 
                     b.HasOne("DB.Entity.Model.UserEntity", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("DB.Entity.Workflow.WorkflowProcessEntity", b =>

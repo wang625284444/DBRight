@@ -9,9 +9,6 @@ namespace DB.Repostitory.limit
 {
     public class ModuleRepository : BaseRepository<ModuleEntity>, IModuleRepository
     {
-        public ModuleRepository(BaseDbContext Context) : base(Context)
-        {
-
-        }
+        public ModuleRepository(BaseDbContext Context) : base(Context) { }
     }
 }

@@ -13,12 +13,14 @@ namespace DB.Web.Controllers
     public class HomeController : DBController
     {
         #region 构造函数
+        private IUserRoleService _userRoleService { get; set; }
         private IModuleService _moduleService { get; set; }
         private IRoleService _roleService { get; set; }
         private IRoleModuleService _roleModuleService { get; set; }
         private HttpContextUtil _httpContextUtil { get; set; }
-        public HomeController(IModuleService moduleService, IRoleService roleService, IRoleModuleService roleModuleService, HttpContextUtil httpContextUtil)
+        public HomeController(IUserRoleService userRoleService, IModuleService moduleService, IRoleService roleService, IRoleModuleService roleModuleService, HttpContextUtil httpContextUtil)
         {
+            this._userRoleService = userRoleService;
             this._moduleService = moduleService;
             this._roleService = roleService;
             this._httpContextUtil = httpContextUtil;
@@ -31,8 +33,10 @@ namespace DB.Web.Controllers
         }
         public async Task<ActionResult> Query()
         {
-            //根据用户获取角色
-            var _roleList = await _roleService.QueryById();
+            //根据用户获取角色关系
+            var _userRole = await _userRoleService.userRoleSessionById();
+            //获取角色
+            var _roleList = await _roleService.QueryById(_userRole.data.RoleId);
             //根据角色获取权限
             var _roleModul = await _roleModuleService.QueryById(_roleList.data.Id);
             //将角色数据转换成数组

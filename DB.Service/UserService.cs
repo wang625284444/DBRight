@@ -41,7 +41,7 @@ namespace DB.Service
             }
             Expression<Func<UserEntity, bool>> where = LinqUtil.True<UserEntity>();
             //根据账号获取用户信息
-            where = where.AndAlso(e => e.UserAccount == userAccount && e.IsStatus == false);
+            where = where.AndAlso(e => e.UserAccount == userAccount && e.IsStatus == true);
             var usersEntity = await _userRepository.GetAsync(where);
             if (usersEntity != null)
             {

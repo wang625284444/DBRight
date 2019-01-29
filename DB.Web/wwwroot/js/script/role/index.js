@@ -1,4 +1,6 @@
 ﻿Ext.onReady(function () {
+    var AllSelectedRecords = [];
+    
     //获取角色下拉
     var boxStore = new Ext.data.Store({
         proxy: new Ext.data.HttpProxy({
@@ -74,7 +76,7 @@
                     width: 75,
                     handler: function () {
                         Ext.Msg.confirm('选择框', '您确定要删除一下数据？', function (btn) {
-                            if (btn === 'Yes') {
+                            if (btn === 'yes') {
                                 var list = [];
                                 var selectedData = grid.getSelectionModel().getSelection();
                                 if (selectedData.length !== 0) {
@@ -103,7 +105,7 @@
                     }
                 }, {
                     xtype: 'button',
-                    //id: 'but_SeeRole',
+                    id: 'but_AddModuleRole',
                     text: '添加模块',
                     margin: '0 10 0 0',
                     height: 30,
@@ -112,7 +114,6 @@
                         var recs = grid.getSelectionModel().getSelection();
                         if (recs.length === 1) {
                             winModulrTree.show();
-
                             Ext.Ajax.request({
                                 url: '/Module/QueryInId',
                                 params: { guid: recs[0].data.id },
@@ -120,21 +121,21 @@
                                     var json = JSON.parse(response.responseText);
                                     var roonodes = treeFrom.getRootNode().childNodes; //获取主节点; 
                                     for (var i = 0; i < roonodes.length; i++) { //从节点中取出子节点依次遍历
-
+                                        roonodes[i].set('checked', false);
                                         for (var j = 0; j < roonodes[i].childNodes.length; j++) {//循环子节点
-
+                                            roonodes[i].childNodes[j].set('checked', false);
                                             for (var k = 0; k < json.dataList.length; k++) { //循环要勾选的数据
                                                 if (roonodes[i].childNodes[j].data.id === json.dataList[k].Id) {
-                                                    //当查询数据存在勾选这个节点
-                                                    //roonodes[i].childNodes[j].parentNode.ui.checkbox.checked = false;
-                                                    //roonodes[i].childNodes[j].attributes.checked = 'checked';
-
+                                                    roonodes[i].set('checked', true);
+                                                    roonodes[i].childNodes[j].set('checked', true);
                                                 }
                                             }
                                         }
                                     }
                                 }
                             });
+                        } else {
+                            Ext.Msg.alert("提示", "请选择一条数据！");
                         }
                     }
                 }, {
@@ -145,7 +146,7 @@
                     height: 30,
                     width: 100,
                     handler: function () {
-                        Ext.Msg.alert('提示', '请选择数据，最少一条！');
+                        //newAddEquipmentWin.show();
                     }
                 }]
         }]
@@ -379,6 +380,11 @@
     var treeFrom = new Ext.tree.Panel({
         rootVisible: false,
         collapsible: false,
+        id: 'treeid',
+        region: "west",
+        pruneRemoved: false,
+        height: 400, //高度
+        width: 200,//宽度
         useArrows: true,
         frame: true,
         animate: false,
@@ -409,15 +415,98 @@
                         record.cascadeBy(function (node) {
                             node.set('checked', true);
                             node.expand(false, true);
+                            buttionstore.load({ params: { guid: e.record.data.id } });
+
                         });
                     } else {
                         record.cascadeBy(function (node) {
                             node.set('checked', false);
+                            buttionstore.load();
                         });
                     }
                 }
             }
+        }
+        ,
+        listeners: {
+            itemclick: function (v, r) {
+                var s = Ext.getCmp('treeid').getSelectionModel().selected.items;
+                if (s[0].raw.checked) {
+                    buttionstore.load({ params: { guid: r.data.id } });
+                }
+
+            }
+        }
+    });
+    treeFrom.expandAll();
+    var buttionstore = Ext.create('Ext.data.Store', {
+        listeners: {
+            load: function (me, records, success, opts) {
+                if (!success || !records || records.length === 0)
+                    return;
+                var selModel = buttiongrid.getSelectionModel();
+                Ext.Array.each(AllSelectedRecords, function () {
+                    for (var i = 0; i < records.length; i++) {
+                        var record = records[i];
+                        if (record.get("id") === this.get("id"))
+                        {
+                            selModel.select(record, true, true);
+                        }
+                    }
+                });
+            }
         },
+        proxy: {
+            type: 'ajax',
+            url: '/ModuleButtion/GetModuleButtionById',
+            actionMethods: { read: 'POST' }
+        }
+    });
+    //显示按钮GRID
+    var buttiongrid = new Ext.grid.GridPanel({
+        border: false,
+        region: "center",//窗口布局类型
+        height: 400, //高度
+        width: 150,//宽度
+        autoScroll: true,
+        autoHeight: true,
+        forceFit: true,
+        frame: true,
+        split: false,
+        margin: 2,
+        selModel: {
+            selType: 'checkboxmodel',
+            listeners: {
+                deselect: function (me, record, index, opts) {
+
+                    AllSelectedRecords = Ext.Array.filter(AllSelectedRecords, function (item) {
+                        return item.get("id") !== record.get("id");
+                    });
+                },
+                select: function (me, record, index, opts) {
+                    AllSelectedRecords.push(record);
+                }
+            }
+        },   //选择框
+        store: buttionstore,
+        columns: [
+            { text: 'ID', dataIndex: 'id', hidden: true },
+            { text: "按钮名称", width: 120, dataIndex: 'buttionName', sortable: true }
+        ]
+    });
+    //添加模块
+    var winModulrTree = Ext.create("Ext.window.Window", {
+        title: "角色模块管理",
+        draggable: false,
+        closdraggable: false,
+        closable: false,
+        closeAction: 'close', //关闭
+        layout: 'table',
+        height: 400, //高度
+        width: 350,//宽度
+        modal: true, //是否模态窗口，默认为false
+        resizable: false,
+        items: [treeFrom, buttiongrid],
         buttonAlign: 'center',
         buttons: [
             {
@@ -438,11 +527,12 @@
                     Ext.Ajax.request({
                         url: '/RoleModule/AddModuleToArray',
                         method: 'POST',
-                        params: { obj: JSON.stringify(list) },
+                        params: { obj: JSON.stringify(list), guid: recs },
                         success: function (response) {
                             var obj = JSON.parse(response.responseText);
                             Ext.Msg.alert('提示', obj.status_message);
                             store.load();
+                            winModulrTree.close();
                         },
                         failure: function (response) {
                             Ext.Msg.alert('失败', '请求超时或网络故障，错误编号：' + response.status);
@@ -455,20 +545,5 @@
                     winModulrTree.close();
                 }
             }]
-    });
-    treeFrom.expandAll();
-    //添加模块
-    var winModulrTree = Ext.create("Ext.window.Window", {
-        title: "角色模块管理",
-        draggable: false,
-        closdraggable: false,
-        closable: false,
-        closeAction: 'close', //关闭
-        height: 400, //高度
-        width: 350,//宽度
-        layout: "fit",//窗口布局类型
-        modal: true, //是否模态窗口，默认为false
-        resizable: false,
-        items: [treeFrom]
     });
 });

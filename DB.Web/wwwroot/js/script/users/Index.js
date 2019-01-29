@@ -49,12 +49,10 @@
                 xtype: 'button',
                 text: '查询',
                 margin: '0 10 0 0',
-                    height: 30,
+                height: 30,
                 width: 75,
                 handler: function () {
-                    store.reload({
-
-                    });
+                    store.load();
                 }
             }]
         }, {
@@ -154,7 +152,18 @@
                         }
 
                     }
-                }]
+                }, {
+                    xtype: 'button',
+                    id: 'bit_Role',
+                    text: '分配角色',
+                    margin: '0 10 0 0',
+                    height: 30,
+                    width: 80,
+                    handler: function () {
+                        WinBranchUser.show();
+                    }
+                }
+            ]
         }]
     });
     //创建grid数据源
@@ -375,5 +384,72 @@
         modal: true, //是否模态窗口，默认为false
         resizable: false,
         items: [modifyForm]
+    });
+
+    var branchGrid = new Ext.GridPanel({
+        bodyStyle: 'padding:5px 5px 0',
+        //store: Ext.create('Ext.data.Store', {
+        //    pageSize: 10,  //页容量10条数据\
+        //    proxy: {
+        //        type: 'ajax',
+        //        url: '/Role/QueryRole',
+        //        extraParams: {},//post给后台的参数
+        //        actionMethods: { read: 'POST' },
+        //        reader: {   //这里的reader为数据存储组织的地方
+        //            type: 'json',
+        //            rootProperty: 'rows',
+        //            totalProperty: 'total'
+        //        }
+        //    },
+        //    autoLoad: true  //即时加载数据
+        //}),
+        columns: [
+            { text: 'ID', dataIndex: 'id', hidden: true },
+            { text: '模块名称', dataIndex: 'roleName', maxWidth: 120, align: 'center' }
+        ],
+        buttonAlign: 'center',
+        buttons: [
+            {
+                text: '保存',
+                handler: function () {
+                    Ext.Ajax.request({
+                        url: '',
+                        method: 'POST',
+                        params: {
+                            
+                        },
+                        success: function (response) {
+                            var obj = JSON.parse(response.responseText);
+                            Ext.Msg.alert('提示', obj.status_message);
+
+                            store.load();//重新加载数据
+
+                        },
+                        failure: function (response) {
+                            Ext.Msg.alert('失败', '请求超时或网络故障，错误编号：' + response.status);
+                        }
+                    });
+                }
+            }, {
+                text: '关闭',
+                handler: function () {
+                    
+                }
+            }
+        ]
+    });
+    //分配角色
+    var WinBranchUser = Ext.create("Ext.window.Window", {
+        title: "角色分配",
+        draggable: false,
+        closdraggable: false,
+        closable: false,
+        closeAction: 'close', //关闭
+        height: 320, //高度
+        width: 350,//宽度
+        layout: "fit",//窗口布局类型
+        modal: true, //是否模态窗口，默认为false
+        resizable: false,
+        items: [branchGrid]
     });
 });

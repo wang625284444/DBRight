@@ -29,7 +29,12 @@ namespace DB.Web.Autofac
 
             builder.RegisterType<RoleModuleRepository>().As<IRoleModuleRepository>();
             builder.RegisterType<RoleModuleService>().As<IRoleModuleService>();
-        }
 
+            builder.RegisterType<ModuleButtionRepository>().As<IModuleButtionRepository>();
+            builder.RegisterType<ModuleButtionService>().As<IModuleButtionService>();
+
+            builder.RegisterType<RoleButtionRepository>().As<IRoleButtionRepository>();
+            builder.RegisterType<RoleButtionService>().As<IRoleButtionService>();
+        }
     }
 }

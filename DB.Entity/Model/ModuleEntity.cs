@@ -6,7 +6,7 @@ namespace DB.Entity.Model
     /// <summary>
     /// 模块
     /// </summary>
-    public class ModuleEntity: AssistanceEntity
+    public class ModuleEntity
     {
         /// <summary>
         /// 主键Id

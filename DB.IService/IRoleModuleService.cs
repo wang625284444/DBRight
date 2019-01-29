@@ -23,5 +23,12 @@ namespace DB.IService
         /// <param name="roleModuleList"></param>
         /// <returns></returns>
         Task<BaseResult<bool>> AddModuleList(string obj);
+
+        /// <summary>
+        /// 根据角色删除全部权限关系
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <returns></returns>
+        Task<BaseResult<bool>> DelModuleList(Guid guid);
     }
 }
