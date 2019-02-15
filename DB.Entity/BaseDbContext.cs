@@ -17,9 +17,11 @@ namespace DB.Entity
 
         public DbSet<ModuleButtionEntity> T_ModuleButtion { get; set; }
 
+        public DbSet<RoleButtionEntity> T_RoleButtion { get; set; }
+
         public DbSet<RoleModuleEntity> T_RoleModule { get; set; }
 
-        public DbSet<WorkflowConfigureEntity> T_RorkflowConfigure { get; set; }
+        public DbSet<WorkflowConfigureEntity> T_WorkflowConfigure { get; set; }
 
         public DbSet<WorkflowProcessEntity> T_WorkflowProcess { get; set; }
 

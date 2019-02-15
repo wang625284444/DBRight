@@ -15,6 +15,10 @@ namespace DB.Utils.Common
         /// </summary>
         public const string role_info = "roleinfo";
         /// <summary>
+        /// 用户邓丽之后存放Session按钮关系信息
+        /// </summary>
+        public const string rolebuttion_info = "rolebuttioninfo";
+        /// <summary>
         /// 用户登录之后存放Session模块信息
         /// </summary>
         public const string module_info = "moduleinfo";

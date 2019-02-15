@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DB.Entity.Workflow
 {
@@ -36,7 +34,7 @@ namespace DB.Entity.Workflow
         /// <summary>
         /// 创建时间/只读
         /// </summary>
-        public DateTime CreationTime { get; set; } = DateTime.Now;
+        public DateTime CreationTime { get; private set; } = DateTime.Now;
         /// <summary>
         /// 创建人
         /// </summary>

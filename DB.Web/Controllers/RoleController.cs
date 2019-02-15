@@ -31,7 +31,7 @@ namespace DB.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> GetQuery()
         {
-            var user = getUserSession();
+            var user = GetUserSession;
             var list = await _roleModuleService.QueryById(user.Id);
             string json = JsonNetHelper.SerializeObject(list);
             return Json(json);
@@ -41,7 +41,7 @@ namespace DB.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult> QueryRole(RoleEntity roleEntity, int page, int limit)
+        public async Task<IActionResult> QueryRole(RoleEntity roleEntity, int page, int limit)
         {
             return Json(await _roleService.QueryRole(roleEntity, page, limit));
         }
@@ -50,7 +50,7 @@ namespace DB.Web.Controllers
         /// </summary>
         /// <param name="roleName"></param>
         /// <returns></returns>
-        public async Task<ActionResult> QueryRoleEffective(string roleName)
+        public async Task<IActionResult> QueryRoleEffective(string roleName)
         {
             var list = await _roleService.QueryRoleEffective();
             return Json(list.data.Select(x => new { x.Id, x.RoleName, x.Pid }));
@@ -60,7 +60,7 @@ namespace DB.Web.Controllers
         /// </summary>
         /// <param name="roleEntity"></param>
         /// <returns></returns>
-        public async Task<ActionResult> AddRole(RoleEntity roleEntity)
+        public async Task<IActionResult> AddRole(RoleEntity roleEntity)
         {
             return Json(await _roleService.AddRole(roleEntity));
         }
@@ -70,7 +70,7 @@ namespace DB.Web.Controllers
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public async Task<ActionResult> DelRoleId(string obj)
+        public async Task<IActionResult> DelRoleId(string obj)
         {
             return Json(await _roleService.DelRoleId(obj));
         }

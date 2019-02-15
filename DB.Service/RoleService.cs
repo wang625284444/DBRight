@@ -62,10 +62,6 @@ namespace DB.Service
             Expression<Func<RoleEntity, bool>> where = LinqUtil.True<RoleEntity>();
             where = where.AndAlso(e => e.IsStatus == true || e.Id == usersEntity.Id);
             var _rolelist = await _roleRepository.GetAsync(where);
-            if (_rolelist != null)
-            {
-                _httpContextUtil.setObjectAsJson(KeyUtil.role_info, _rolelist);
-            }
             return new BaseResult<RoleEntity>(_rolelist);
         }
 
@@ -79,6 +75,10 @@ namespace DB.Service
             Expression<Func<RoleEntity, bool>> where = LinqUtil.True<RoleEntity>();
             where = where.AndAlso(e => e.IsStatus == false || e.Id == guid);
             var _rolelist = await _roleRepository.GetAsync(where);
+            if (_rolelist != null)
+            {
+                _httpContextUtil.setObjectAsJson(KeyUtil.role_info, _rolelist);
+            }
             return new BaseResult<RoleEntity>(_rolelist);
         }
 

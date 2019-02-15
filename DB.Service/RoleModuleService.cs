@@ -15,10 +15,11 @@ namespace DB.Service
     public class RoleModuleService : IRoleModuleService
     {
         private IRoleModuleRepository _roleModuleRepository { get; set; }
-        public RoleModuleService(IRoleModuleRepository roleModuleRepository)
+        private HttpContextUtil _httpContextUtil { get; set; }
+        public RoleModuleService(IRoleModuleRepository roleModuleRepository, HttpContextUtil httpContextUtil)
         {
             this._roleModuleRepository = roleModuleRepository;
-
+            this._httpContextUtil = httpContextUtil;
         }
 
         /// <summary>

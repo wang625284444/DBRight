@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DB.Entity.Migrations
 {
     [DbContext(typeof(BaseDbContext))]
-    [Migration("20190128034957_Add-DBRight2")]
-    partial class AddDBRight2
+    [Migration("20190129085218_Add-DBRight3")]
+    partial class AddDBRight3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -25,6 +25,8 @@ namespace DB.Entity.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ButtionId");
 
                     b.Property<string>("ButtionName");
 
@@ -51,6 +53,40 @@ namespace DB.Entity.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("T_Module");
+                });
+
+            modelBuilder.Entity("DB.Entity.Model.RoleButtionEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreationTime");
+
+                    b.Property<string>("CreationUser");
+
+                    b.Property<bool>("IsStatus");
+
+                    b.Property<Guid>("ModuleButtionId");
+
+                    b.Property<Guid>("RoleId");
+
+                    b.Property<DateTime>("UpdateTime");
+
+                    b.Property<string>("WorkflowApprover");
+
+                    b.Property<DateTime>("WorkflowCreationTime");
+
+                    b.Property<int?>("WorkflowStatus");
+
+                    b.Property<DateTime>("WorkflowTime");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ModuleButtionId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("T_RoleButtion");
                 });
 
             modelBuilder.Entity("DB.Entity.Model.RoleEntity", b =>
@@ -168,11 +204,11 @@ namespace DB.Entity.Migrations
 
                     b.Property<bool>("IsStatus");
 
-                    b.Property<Guid?>("RoleId");
+                    b.Property<Guid>("RoleId");
 
                     b.Property<DateTime>("UpdateTime");
 
-                    b.Property<Guid?>("UserId");
+                    b.Property<Guid>("UserId");
 
                     b.Property<string>("WorkflowApprover");
 
@@ -247,6 +283,19 @@ namespace DB.Entity.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("DB.Entity.Model.RoleButtionEntity", b =>
+                {
+                    b.HasOne("DB.Entity.Model.ModuleButtionEntity", "ModuleButtion")
+                        .WithMany()
+                        .HasForeignKey("ModuleButtionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("DB.Entity.Model.RoleEntity", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("DB.Entity.Model.RoleModuleEntity", b =>
                 {
                     b.HasOne("DB.Entity.Model.ModuleEntity", "Module")
@@ -264,11 +313,13 @@ namespace DB.Entity.Migrations
                 {
                     b.HasOne("DB.Entity.Model.RoleEntity", "Role")
                         .WithMany()
-                        .HasForeignKey("RoleId");
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("DB.Entity.Model.UserEntity", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("DB.Entity.Workflow.WorkflowProcessEntity", b =>

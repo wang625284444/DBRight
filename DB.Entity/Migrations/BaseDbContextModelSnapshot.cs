@@ -24,6 +24,8 @@ namespace DB.Entity.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ButtionId");
+
                     b.Property<string>("ButtionName");
 
                     b.Property<Guid>("ModuleId");
@@ -49,6 +51,40 @@ namespace DB.Entity.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("T_Module");
+                });
+
+            modelBuilder.Entity("DB.Entity.Model.RoleButtionEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreationTime");
+
+                    b.Property<string>("CreationUser");
+
+                    b.Property<bool>("IsStatus");
+
+                    b.Property<Guid>("ModuleButtionId");
+
+                    b.Property<Guid>("RoleId");
+
+                    b.Property<DateTime>("UpdateTime");
+
+                    b.Property<string>("WorkflowApprover");
+
+                    b.Property<DateTime>("WorkflowCreationTime");
+
+                    b.Property<int?>("WorkflowStatus");
+
+                    b.Property<DateTime>("WorkflowTime");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ModuleButtionId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("T_RoleButtion");
                 });
 
             modelBuilder.Entity("DB.Entity.Model.RoleEntity", b =>
@@ -206,7 +242,7 @@ namespace DB.Entity.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("T_RorkflowConfigure");
+                    b.ToTable("T_WorkflowConfigure");
                 });
 
             modelBuilder.Entity("DB.Entity.Workflow.WorkflowProcessEntity", b =>
@@ -242,6 +278,19 @@ namespace DB.Entity.Migrations
                     b.HasOne("DB.Entity.Model.ModuleEntity", "Module")
                         .WithMany()
                         .HasForeignKey("ModuleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("DB.Entity.Model.RoleButtionEntity", b =>
+                {
+                    b.HasOne("DB.Entity.Model.ModuleButtionEntity", "ModuleButtion")
+                        .WithMany()
+                        .HasForeignKey("ModuleButtionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("DB.Entity.Model.RoleEntity", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

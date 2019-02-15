@@ -16,7 +16,7 @@ namespace DB.Entity.Model
         /// </summary>
         public Guid RoleId { get; set; }
         /// <summary>
-        /// 角色关联外键
+        /// 创建角色外键
         /// </summary>
         public RoleEntity Role { get; set; }
         /// <summary>
@@ -24,8 +24,11 @@ namespace DB.Entity.Model
         /// </summary>
         public Guid ModuleButtionId { get; set; }
         /// <summary>
-        /// 模块外键
+        /// 创建按钮外键
         /// </summary>
         public ModuleButtionEntity ModuleButtion { get; set; }
+
+
+
     }
 }

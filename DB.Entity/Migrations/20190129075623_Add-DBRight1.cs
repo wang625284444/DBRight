@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DB.Entity.Migrations
 {
-    public partial class Initial : Migration
+    public partial class AddDBRight1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,14 +12,6 @@ namespace DB.Entity.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    WorkflowCreationTime = table.Column<DateTime>(nullable: false),
-                    WorkflowApprover = table.Column<string>(nullable: true),
-                    WorkflowTime = table.Column<DateTime>(nullable: false),
-                    WorkflowStatus = table.Column<int>(nullable: true),
-                    IsStatus = table.Column<bool>(nullable: false),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    CreationUser = table.Column<string>(nullable: true),
-                    UpdateTime = table.Column<DateTime>(nullable: false),
                     UrlName = table.Column<string>(nullable: true),
                     Url = table.Column<string>(nullable: true),
                     Pid = table.Column<Guid>(nullable: false)
@@ -48,6 +40,27 @@ namespace DB.Entity.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_T_Role", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "T_RoleButtion",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    WorkflowCreationTime = table.Column<DateTime>(nullable: false),
+                    WorkflowApprover = table.Column<string>(nullable: true),
+                    WorkflowTime = table.Column<DateTime>(nullable: false),
+                    WorkflowStatus = table.Column<int>(nullable: true),
+                    IsStatus = table.Column<bool>(nullable: false),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    CreationUser = table.Column<string>(nullable: true),
+                    UpdateTime = table.Column<DateTime>(nullable: false),
+                    RoleId = table.Column<Guid>(nullable: false),
+                    ModuleButtionId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_T_RoleButtion", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -90,6 +103,25 @@ namespace DB.Entity.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_T_User", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "T_ModuleButtion",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    ButtionName = table.Column<string>(nullable: true),
+                    ModuleId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_T_ModuleButtion", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_T_ModuleButtion_T_Module_ModuleId",
+                        column: x => x.ModuleId,
+                        principalTable: "T_Module",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -163,8 +195,8 @@ namespace DB.Entity.Migrations
                     CreationTime = table.Column<DateTime>(nullable: false),
                     CreationUser = table.Column<string>(nullable: true),
                     UpdateTime = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<Guid>(nullable: true),
-                    RoleId = table.Column<Guid>(nullable: true)
+                    UserId = table.Column<Guid>(nullable: false),
+                    RoleId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -174,14 +206,19 @@ namespace DB.Entity.Migrations
                         column: x => x.RoleId,
                         principalTable: "T_Role",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_T_UserRole_T_User_UserId",
                         column: x => x.UserId,
                         principalTable: "T_User",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_T_ModuleButtion_ModuleId",
+                table: "T_ModuleButtion",
+                column: "ModuleId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_T_RoleModule_ModuleId",
@@ -211,6 +248,12 @@ namespace DB.Entity.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "T_ModuleButtion");
+
+            migrationBuilder.DropTable(
+                name: "T_RoleButtion");
+
             migrationBuilder.DropTable(
                 name: "T_RoleModule");
 

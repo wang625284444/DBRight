@@ -48,8 +48,7 @@ namespace DB.Web.InitializationData
                         WorkflowStatus = WorkflowStatus.ApprovalAndApproval
                     });
 
-
-
+                    
                     //角色信息
                     var role1 = context.T_Role.Add(new RoleEntity
                     {
@@ -58,10 +57,9 @@ namespace DB.Web.InitializationData
                         Pid = new Guid("00000000-0000-0000-0000-000000000000"),
                         WorkflowStatus = WorkflowStatus.ApprovalAndApproval
                     });
+                    
 
-
-
-                    //账号管理
+                    //用户管理
                     var module1 = context.T_Module.Add(new ModuleEntity
                     {
                         Id = Guid.NewGuid(),
@@ -76,28 +74,9 @@ namespace DB.Web.InitializationData
                         ModuleId = module1.Entity.Id,
                         WorkflowStatus = WorkflowStatus.ApprovalAndApproval
                     });
-                    //添加按钮
-                    context.T_ModuleButtion.Add(new ModuleButtionEntity
-                    {
-                        Id = Guid.NewGuid(),
-                        ModuleId = module1.Entity.Id,
-                        ButtionName = "添加用户",
-                    });
-                    context.T_ModuleButtion.Add(new ModuleButtionEntity
-                    {
-                        Id = Guid.NewGuid(),
-                        ModuleId = module1.Entity.Id,
-                        ButtionName = "修改用户",
-                    });
-                    context.T_ModuleButtion.Add(new ModuleButtionEntity
-                    {
-                        Id = Guid.NewGuid(),
-                        ModuleId = module1.Entity.Id,
-                        ButtionName = "删除用户",
-                    });
 
 
-                    
+                    #region 账号管理
                     //账号管理
                     var module2 = context.T_Module.Add(new ModuleEntity
                     {
@@ -114,32 +93,75 @@ namespace DB.Web.InitializationData
                         ModuleId = module2.Entity.Id
                     });
                     //添加按钮
-                    context.T_ModuleButtion.Add(new ModuleButtionEntity
+                    var but_add2 = context.T_ModuleButtion.Add(new ModuleButtionEntity
                     {
                         Id = Guid.NewGuid(),
                         ModuleId = module2.Entity.Id,
-                        ButtionName = "添加账号",
+                        ButtionId = "but_add",
+                        ButtionName = "添加用户",
                     });
-                    context.T_ModuleButtion.Add(new ModuleButtionEntity
+                    var but_update2 = context.T_ModuleButtion.Add(new ModuleButtionEntity
                     {
                         Id = Guid.NewGuid(),
                         ModuleId = module2.Entity.Id,
-                        ButtionName = "修改账号",
+                        ButtionId = "but_update",
+                        ButtionName = "修改用户",
                     });
-                    context.T_ModuleButtion.Add(new ModuleButtionEntity
+                    var but_delete2 = context.T_ModuleButtion.Add(new ModuleButtionEntity
                     {
                         Id = Guid.NewGuid(),
                         ModuleId = module2.Entity.Id,
-                        ButtionName = "删除账号",
+                        ButtionId = "but_delete",
+                        ButtionName = "删除用户",
                     });
-                    context.T_ModuleButtion.Add(new ModuleButtionEntity
+                    var bit_ble2 = context.T_ModuleButtion.Add(new ModuleButtionEntity
                     {
                         Id = Guid.NewGuid(),
                         ModuleId = module2.Entity.Id,
+                        ButtionId = "bit_ble",
+                        ButtionName = "禁用/启用",
+                    });
+                    var bit_Role2 = context.T_ModuleButtion.Add(new ModuleButtionEntity
+                    {
+                        Id = Guid.NewGuid(),
+                        ModuleId = module2.Entity.Id,
+                        ButtionId = "bit_Role",
                         ButtionName = "分配角色",
                     });
-
-
+                    //建立按钮关系
+                    context.T_RoleButtion.Add(new RoleButtionEntity
+                    {
+                        Id = Guid.NewGuid(),
+                        RoleId = role1.Entity.Id,
+                        ModuleButtionId = but_add2.Entity.Id
+                    });
+                    context.T_RoleButtion.Add(new RoleButtionEntity
+                    {
+                        Id = Guid.NewGuid(),
+                        RoleId = role1.Entity.Id,
+                        ModuleButtionId = but_update2.Entity.Id
+                    });
+                    context.T_RoleButtion.Add(new RoleButtionEntity
+                    {
+                        Id = Guid.NewGuid(),
+                        RoleId = role1.Entity.Id,
+                        ModuleButtionId = but_delete2.Entity.Id
+                    });
+                    context.T_RoleButtion.Add(new RoleButtionEntity
+                    {
+                        Id = Guid.NewGuid(),
+                        RoleId = role1.Entity.Id,
+                        ModuleButtionId = bit_ble2.Entity.Id
+                    });
+                    context.T_RoleButtion.Add(new RoleButtionEntity
+                    {
+                        Id = Guid.NewGuid(),
+                        RoleId = role1.Entity.Id,
+                        ModuleButtionId = bit_Role2.Entity.Id
+                    });
+                    #endregion
+                    
+                    #region 角色管理
                     //角色管理
                     var module3 = context.T_Module.Add(new ModuleEntity
                     {
@@ -156,37 +178,77 @@ namespace DB.Web.InitializationData
                         ModuleId = module3.Entity.Id
                     });
                     //添加按钮
-                    context.T_ModuleButtion.Add(new ModuleButtionEntity
+                    var but_add3 = context.T_ModuleButtion.Add(new ModuleButtionEntity
                     {
                         Id = Guid.NewGuid(),
                         ModuleId = module3.Entity.Id,
+                        ButtionId = "but_add",
                         ButtionName = "添加角色",
                     });
-                    context.T_ModuleButtion.Add(new ModuleButtionEntity
+                    var but_update3 = context.T_ModuleButtion.Add(new ModuleButtionEntity
                     {
                         Id = Guid.NewGuid(),
                         ModuleId = module3.Entity.Id,
+                        ButtionId = "but_update",
                         ButtionName = "修改角色",
                     });
-                    context.T_ModuleButtion.Add(new ModuleButtionEntity
+                    var but_delete3 = context.T_ModuleButtion.Add(new ModuleButtionEntity
                     {
                         Id = Guid.NewGuid(),
                         ModuleId = module3.Entity.Id,
+                        ButtionId = "but_delete",
                         ButtionName = "删除角色",
                     });
-                    context.T_ModuleButtion.Add(new ModuleButtionEntity
+                    var but_AddModuleRole3 = context.T_ModuleButtion.Add(new ModuleButtionEntity
                     {
                         Id = Guid.NewGuid(),
                         ModuleId = module3.Entity.Id,
+                        ButtionId = "but_AddModuleRole",
                         ButtionName = "添加模块",
                     });
-                    context.T_ModuleButtion.Add(new ModuleButtionEntity
+                    var but_SeeRole3 = context.T_ModuleButtion.Add(new ModuleButtionEntity
                     {
                         Id = Guid.NewGuid(),
                         ModuleId = module3.Entity.Id,
+                        ButtionId = "but_SeeRole",
                         ButtionName = "查看账号层级",
                     });
+                    //建立按钮关系
+                    context.T_RoleButtion.Add(new RoleButtionEntity
+                    {
+                        Id = Guid.NewGuid(),
+                        RoleId = role1.Entity.Id,
+                        ModuleButtionId = but_add3.Entity.Id
+                    });
+                    context.T_RoleButtion.Add(new RoleButtionEntity
+                    {
+                        Id = Guid.NewGuid(),
+                        RoleId = role1.Entity.Id,
+                        ModuleButtionId = but_update3.Entity.Id
+                    });
+                    context.T_RoleButtion.Add(new RoleButtionEntity
+                    {
+                        Id = Guid.NewGuid(),
+                        RoleId = role1.Entity.Id,
+                        ModuleButtionId = but_delete3.Entity.Id
+                    });
+                    context.T_RoleButtion.Add(new RoleButtionEntity
+                    {
+                        Id = Guid.NewGuid(),
+                        RoleId = role1.Entity.Id,
+                        ModuleButtionId = but_AddModuleRole3.Entity.Id
+                    });
+                    context.T_RoleButtion.Add(new RoleButtionEntity
+                    {
+                        Id = Guid.NewGuid(),
+                        RoleId = role1.Entity.Id,
+                        ModuleButtionId = but_SeeRole3.Entity.Id
+                    });
+                    #endregion
 
+                    #region 审批管理
+
+                    #endregion
 
 
                     //添加管理员
@@ -196,7 +258,6 @@ namespace DB.Web.InitializationData
                         User = user1.Entity,
                         Role = role1.Entity
                     });
-
                 }
                 context.SaveChanges();
             }

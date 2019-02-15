@@ -15,6 +15,8 @@ namespace DB.Entity.Model
         /// 按钮名称
         /// </summary>
         public string ButtionName { get; set; }
+
+        public string ButtionId { get; set; }
         /// <summary>
         /// 模块ID
         /// </summary>

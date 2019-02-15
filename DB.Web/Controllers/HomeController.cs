@@ -17,13 +17,15 @@ namespace DB.Web.Controllers
         private IModuleService _moduleService { get; set; }
         private IRoleService _roleService { get; set; }
         private IRoleModuleService _roleModuleService { get; set; }
+        private IRoleButtionService _roleButtionService { get; set; }
         private HttpContextUtil _httpContextUtil { get; set; }
-        public HomeController(IUserRoleService userRoleService, IModuleService moduleService, IRoleService roleService, IRoleModuleService roleModuleService, HttpContextUtil httpContextUtil)
+        public HomeController(IUserRoleService userRoleService, IModuleService moduleService, IRoleService roleService, IRoleModuleService roleModuleService, IRoleButtionService roleButtionService, HttpContextUtil httpContextUtil)
         {
             this._userRoleService = userRoleService;
             this._moduleService = moduleService;
             this._roleService = roleService;
             this._httpContextUtil = httpContextUtil;
+            this._roleButtionService = roleButtionService;
             this._roleModuleService = roleModuleService;
         }
         #endregion
@@ -37,6 +39,8 @@ namespace DB.Web.Controllers
             var _userRole = await _userRoleService.userRoleSessionById();
             //获取角色
             var _roleList = await _roleService.QueryById(_userRole.data.RoleId);
+            //根据角色获取按钮
+            await _roleButtionService.QueryByRoleID();
             //根据角色获取权限
             var _roleModul = await _roleModuleService.QueryById(_roleList.data.Id);
             //将角色数据转换成数组

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DB.Entity.Migrations
 {
     [DbContext(typeof(BaseDbContext))]
-    [Migration("20190124093900_AddRowVersion")]
-    partial class AddRowVersion
+    [Migration("20190129075623_Add-DBRight1")]
+    partial class AddDBRight1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,22 @@ namespace DB.Entity.Migrations
                 .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("DB.Entity.Model.ModuleButtionEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ButtionName");
+
+                    b.Property<Guid>("ModuleId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ModuleId");
+
+                    b.ToTable("T_ModuleButtion");
+                });
 
             modelBuilder.Entity("DB.Entity.Model.ModuleEntity", b =>
                 {
@@ -35,6 +51,36 @@ namespace DB.Entity.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("T_Module");
+                });
+
+            modelBuilder.Entity("DB.Entity.Model.RoleButtionEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreationTime");
+
+                    b.Property<string>("CreationUser");
+
+                    b.Property<bool>("IsStatus");
+
+                    b.Property<Guid>("ModuleButtionId");
+
+                    b.Property<Guid>("RoleId");
+
+                    b.Property<DateTime>("UpdateTime");
+
+                    b.Property<string>("WorkflowApprover");
+
+                    b.Property<DateTime>("WorkflowCreationTime");
+
+                    b.Property<int?>("WorkflowStatus");
+
+                    b.Property<DateTime>("WorkflowTime");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("T_RoleButtion");
                 });
 
             modelBuilder.Entity("DB.Entity.Model.RoleEntity", b =>
@@ -152,11 +198,11 @@ namespace DB.Entity.Migrations
 
                     b.Property<bool>("IsStatus");
 
-                    b.Property<Guid?>("RoleId");
+                    b.Property<Guid>("RoleId");
 
                     b.Property<DateTime>("UpdateTime");
 
-                    b.Property<Guid?>("UserId");
+                    b.Property<Guid>("UserId");
 
                     b.Property<string>("WorkflowApprover");
 
@@ -223,6 +269,14 @@ namespace DB.Entity.Migrations
                     b.ToTable("T_WorkflowProcess");
                 });
 
+            modelBuilder.Entity("DB.Entity.Model.ModuleButtionEntity", b =>
+                {
+                    b.HasOne("DB.Entity.Model.ModuleEntity", "Module")
+                        .WithMany()
+                        .HasForeignKey("ModuleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("DB.Entity.Model.RoleModuleEntity", b =>
                 {
                     b.HasOne("DB.Entity.Model.ModuleEntity", "Module")
@@ -240,11 +294,13 @@ namespace DB.Entity.Migrations
                 {
                     b.HasOne("DB.Entity.Model.RoleEntity", "Role")
                         .WithMany()
-                        .HasForeignKey("RoleId");
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("DB.Entity.Model.UserEntity", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("DB.Entity.Workflow.WorkflowProcessEntity", b =>

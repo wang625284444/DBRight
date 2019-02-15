@@ -14,9 +14,7 @@ namespace DB.Service
 {
     public class ModuleService : IModuleService
     {
-        //注入用户管理操作
         private IModuleRepository _moduleRepository { get; set; }
-
         private HttpContextUtil _httpContextUtil { get; set; }
         public ModuleService(IModuleRepository moduleRepository, HttpContextUtil httpContextUtil)
         {

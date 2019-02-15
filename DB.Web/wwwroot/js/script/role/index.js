@@ -1,6 +1,6 @@
 ﻿Ext.onReady(function () {
+    //按钮ID集合
     var AllSelectedRecords = [];
-    
     //获取角色下拉
     var boxStore = new Ext.data.Store({
         proxy: new Ext.data.HttpProxy({
@@ -112,8 +112,25 @@
                     width: 75,
                     handler: function () {
                         var recs = grid.getSelectionModel().getSelection();
+                        Ext.Ajax.request({
+                            url: '/RoleButtion/QueryByRoleID',
+                            method: 'POST',
+                            params: { guid: recs[0].data.id },
+                            success: function (response) {
+                                var json = JSON.parse(response.responseText);
+                                if (json.length !== 0) {
+                                    for (var i = 0; i <= json.length - 1; i++) {
+                                        AllSelectedRecords.push(json[i]);
+                                    }
+                                }
+                            },
+                            failure: function (response) {
+                                Ext.Msg.alert('失败', '请求超时或网络故障，错误编号：' + response.status);
+                            }
+                        });
                         if (recs.length === 1) {
                             winModulrTree.show();
+                            buttionstoreYse.load();
                             Ext.Ajax.request({
                                 url: '/Module/QueryInId',
                                 params: { guid: recs[0].data.id },
@@ -376,7 +393,7 @@
         resizable: false,
         items: [modifyForm]
     });
-    //添加模块
+    //Tree添加模块
     var treeFrom = new Ext.tree.Panel({
         rootVisible: false,
         collapsible: false,
@@ -392,13 +409,9 @@
             proxy: {
                 type: 'ajax',
                 url: '/Module/Query',
-                reader: {
-                    type: 'json'
-                }
+                reader: { type: 'json' }
             },
-            root: {
-                expanded: true
-            }
+            root: { expanded: true }
         }),
         viewConfig: {
             onCheckboxChange: function (e, t) {
@@ -415,51 +428,68 @@
                         record.cascadeBy(function (node) {
                             node.set('checked', true);
                             node.expand(false, true);
-                            buttionstore.load({ params: { guid: e.record.data.id } });
-
+                            buttionstoreYse.load({ params: { guid: e.record.data.id } });
                         });
                     } else {
                         record.cascadeBy(function (node) {
                             node.set('checked', false);
-                            buttionstore.load();
+                            buttionstoreNo.load({ params: { guid: e.record.data.id } });
+                            buttionstoreYse.load();
                         });
                     }
                 }
             }
-        }
-        ,
+        },
         listeners: {
             itemclick: function (v, r) {
                 var s = Ext.getCmp('treeid').getSelectionModel().selected.items;
                 if (s[0].raw.checked) {
-                    buttionstore.load({ params: { guid: r.data.id } });
+                    buttionstoreYse.load({ params: { guid: r.data.id } });
                 }
-
             }
         }
     });
     treeFrom.expandAll();
-    var buttionstore = Ext.create('Ext.data.Store', {
+    //查询要勾选的按钮
+    var buttionstoreYse = Ext.create('Ext.data.Store', {
+        proxy: {
+            type: 'ajax',
+            url: '/ModuleButtion/GetModuleButtionById',
+            actionMethods: { read: 'POST' }
+        },
         listeners: {
             load: function (me, records, success, opts) {
                 if (!success || !records || records.length === 0)
                     return;
                 var selModel = buttiongrid.getSelectionModel();
-                Ext.Array.each(AllSelectedRecords, function () {
+                Ext.Array.each(AllSelectedRecords, function (item) {
                     for (var i = 0; i < records.length; i++) {
                         var record = records[i];
-                        if (record.get("id") === this.get("id"))
-                        {
+                        if (record.get("id") === item.ModuleButtionId) {
                             selModel.select(record, true, true);
                         }
                     }
                 });
             }
-        },
+        }
+    });
+    //查询取消勾选的按钮
+    var buttionstoreNo = Ext.create('Ext.data.Store', {
         proxy: {
             type: 'ajax',
             url: '/ModuleButtion/GetModuleButtionById',
             actionMethods: { read: 'POST' }
+        },
+        listeners: {
+            load: function (me, records, success, opts) {
+                if (!success || !records || records.length === 0)
+                    return;
+                Ext.Array.filter(records, function (items) {
+                    AllSelectedRecords = Ext.Array.filter(AllSelectedRecords, function (item) {
+                        return item.ModuleButtionId !== items.get("id");
+                    });
+                });
+            }
         }
     });
     //显示按钮GRID
@@ -478,17 +508,17 @@
             selType: 'checkboxmodel',
             listeners: {
                 deselect: function (me, record, index, opts) {
-
                     AllSelectedRecords = Ext.Array.filter(AllSelectedRecords, function (item) {
-                        return item.get("id") !== record.get("id");
+                        return item.ModuleButtionId !== record.get("id");
                     });
                 },
                 select: function (me, record, index, opts) {
-                    AllSelectedRecords.push(record);
+                    var obj = { ModuleButtionId: record.id };
+                    AllSelectedRecords.push(obj);
                 }
             }
         },   //选择框
-        store: buttionstore,
+        store: buttionstoreYse,
         columns: [
             { text: 'ID', dataIndex: 'id', hidden: true },
             { text: "按钮名称", width: 120, dataIndex: 'buttionName', sortable: true }
@@ -517,7 +547,6 @@
                     var list = [];
                     var nodes = treeFrom.getChecked();
                     Ext.each(nodes, function (node) {
-                        //alert(node.data.id);
                         //子节点 也就是用户节点
                         if (node.data.leaf) {
                             var moduleList = { RoleId: recs, ModuleId: node.data.id };
@@ -527,12 +556,13 @@
                     Ext.Ajax.request({
                         url: '/RoleModule/AddModuleToArray',
                         method: 'POST',
-                        params: { obj: JSON.stringify(list), guid: recs },
+                        params: { obj: JSON.stringify(list), guid: recs, buttions: JSON.stringify(AllSelectedRecords) },
                         success: function (response) {
                             var obj = JSON.parse(response.responseText);
                             Ext.Msg.alert('提示', obj.status_message);
                             store.load();
                             winModulrTree.close();
+                            AllSelectedRecords.length = 0;//清空内容
                         },
                         failure: function (response) {
                             Ext.Msg.alert('失败', '请求超时或网络故障，错误编号：' + response.status);
@@ -543,6 +573,7 @@
                 text: '关闭',
                 handler: function () {
                     winModulrTree.close();
+                    AllSelectedRecords.length = 0;//清空内容
                 }
             }]
     });
