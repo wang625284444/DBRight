@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace DB.Entity.Assistance
 {
-    public abstract class AssistanceEntity : WorkflowEntity
+    public abstract class AssistanceEntity
     {
         /// <summary>
         /// 数据状态

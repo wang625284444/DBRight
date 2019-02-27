@@ -20,12 +20,12 @@ namespace DB.Entity
         public DbSet<RoleButtionEntity> T_RoleButtion { get; set; }
 
         public DbSet<RoleModuleEntity> T_RoleModule { get; set; }
-
-        public DbSet<WorkflowConfigureEntity> T_WorkflowConfigure { get; set; }
+        
+        public DbSet<WorkflowApprovalInfoEntity> T_WorkflowApprovalInfo { get; set; }
 
         public DbSet<WorkflowProcessEntity> T_WorkflowProcess { get; set; }
 
-       
+
 
 
     }

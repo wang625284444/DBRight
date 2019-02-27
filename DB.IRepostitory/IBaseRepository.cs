@@ -38,17 +38,15 @@ namespace DB.IRepository
         /// 增加或者更新一条数据
         /// </summary>
         /// <param name="entity">实体</param>
-        /// <param name="isSave">是否增加</param>
         /// <returns></returns>
-        bool AddOrUpdate(T entity, bool isSave);
+        bool AddOrUpdate(T entity);
 
         /// <summary>
         /// 增加或者更新一条数据(异步方式)
         /// </summary>
         /// <param name="entity">实体</param>
-        /// <param name="isSave">是否增加</param>
         /// <returns></returns>
-        Task<bool> AddOrUpdateAsync(T entity, bool isSave);
+        Task<bool> AddOrUpdateAsync(T entity);
 
         /// <summary>
         /// 增加多条数据，同一模型

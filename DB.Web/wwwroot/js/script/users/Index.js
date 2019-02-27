@@ -155,12 +155,17 @@
                 }, {
                     xtype: 'button',
                     id: 'bit_Role',
-                    text: '分配角色',
+                    text: '提交数据',
                     margin: '0 10 0 0',
                     height: 30,
                     width: 80,
                     handler: function () {
-                        WinBranchUser.show();
+                        var selectedData = grid.getSelectionModel().getSelection();
+                        if (selectedData.length !== 0) {
+                            WinEstablish("用户提交", "UserEstablish", selectedData[0].id);
+                        } else {
+                            Ext.Msg.alert('提示', '请选择数据，最少一条！');
+                        }
                     }
                 }
             ]
@@ -416,7 +421,7 @@
     //                    url: '',
     //                    method: 'POST',
     //                    params: {
-                            
+
     //                    },
     //                    success: function (response) {
     //                        var obj = JSON.parse(response.responseText);
@@ -433,7 +438,7 @@
     //        }, {
     //            text: '关闭',
     //            handler: function () {
-                    
+
     //            }
     //        }
     //    ]

@@ -4,14 +4,16 @@ using DB.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DB.Entity.Migrations
 {
     [DbContext(typeof(BaseDbContext))]
-    partial class BaseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190218104108_DBRight6")]
+    partial class DBRight6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -244,7 +246,7 @@ namespace DB.Entity.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("T_WorkflowApprovalInfo");
+                    b.ToTable("T_ApprovalInfo");
                 });
 
             modelBuilder.Entity("DB.Entity.Workflow.WorkflowProcessEntity", b =>

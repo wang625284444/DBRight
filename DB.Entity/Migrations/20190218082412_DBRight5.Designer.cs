@@ -4,14 +4,16 @@ using DB.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DB.Entity.Migrations
 {
     [DbContext(typeof(BaseDbContext))]
-    partial class BaseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190218082412_DBRight5")]
+    partial class DBRight5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -225,10 +227,12 @@ namespace DB.Entity.Migrations
                     b.ToTable("T_UserRole");
                 });
 
-            modelBuilder.Entity("DB.Entity.Workflow.WorkflowApprovalInfoEntity", b =>
+            modelBuilder.Entity("DB.Entity.Workflow.WorkflowConfigureEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ConfigureName");
 
                     b.Property<DateTime>("CreationTime");
 
@@ -238,13 +242,11 @@ namespace DB.Entity.Migrations
 
                     b.Property<bool>("IsStatus");
 
-                    b.Property<string>("Status");
-
                     b.Property<DateTime>("UpdateTime");
 
                     b.HasKey("Id");
 
-                    b.ToTable("T_WorkflowApprovalInfo");
+                    b.ToTable("T_WorkflowConfigure");
                 });
 
             modelBuilder.Entity("DB.Entity.Workflow.WorkflowProcessEntity", b =>
@@ -264,9 +266,13 @@ namespace DB.Entity.Migrations
 
                     b.Property<DateTime>("UpdateTime");
 
+                    b.Property<Guid?>("WorkflowConfigureEntityId");
+
                     b.Property<Guid>("WorkflowConfigureId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("WorkflowConfigureEntityId");
 
                     b.ToTable("T_WorkflowProcess");
                 });
@@ -316,6 +322,13 @@ namespace DB.Entity.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("DB.Entity.Workflow.WorkflowProcessEntity", b =>
+                {
+                    b.HasOne("DB.Entity.Workflow.WorkflowConfigureEntity", "WorkflowConfigureEntity")
+                        .WithMany()
+                        .HasForeignKey("WorkflowConfigureEntityId");
                 });
 #pragma warning restore 612, 618
         }

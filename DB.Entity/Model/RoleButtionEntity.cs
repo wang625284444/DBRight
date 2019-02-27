@@ -5,12 +5,8 @@ using System.Text;
 
 namespace DB.Entity.Model
 {
-    public class RoleButtionEntity : AssistanceEntity
+    public class RoleButtionEntity : WorkflowEntity
     {
-        /// <summary>
-        /// 主键ID
-        /// </summary>
-        public Guid Id { get; set; }
         /// <summary>
         /// 角色外键ID
         /// </summary>

@@ -6,7 +6,7 @@ namespace DB.Entity.Model
     /// <summary>
     /// 校色用户关联
     /// </summary>
-    public sealed class UserRoleEntity : AssistanceEntity
+    public sealed class UserRoleEntity : WorkflowEntity
     {
         /// <summary>
         /// 主键Id

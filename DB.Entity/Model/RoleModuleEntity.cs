@@ -8,12 +8,8 @@ namespace DB.Entity.Model
     /// <summary>
     /// 角色关联模块
     /// </summary>
-    public class RoleModuleEntity : AssistanceEntity
+    public class RoleModuleEntity : WorkflowEntity
     {
-        /// <summary>
-        /// 主键Id
-        /// </summary>
-        public Guid Id { get; set; }
         /// <summary>
         ///  角色Id
         /// </summary>

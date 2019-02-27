@@ -1,11 +1,12 @@
 ﻿using DB.Entity.Model;
+using DB.Entity.Workflow;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace DB.IRepository.limit
 {
-    public interface IWorkflowRepository<T>: IBaseRepository<T>where T : class
+    public interface IWorkflowApprovalInfoRepository: IBaseRepository<WorkflowApprovalInfoEntity>
     {
     }
 }

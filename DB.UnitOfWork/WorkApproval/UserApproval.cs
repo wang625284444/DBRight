@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DB.UnitOfWork
+namespace DB.UnitOfWork.WorkApproval
 {
-    public class WorkService
+    class UserApproval
     {
     }
 }
