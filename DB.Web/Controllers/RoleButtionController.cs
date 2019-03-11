@@ -30,14 +30,10 @@ namespace DB.Web.Controllers
             var list = await _roleButtionService.QueryByRoleID(guid);
             return JsonDateTime(list.data.Select(x => new { x.ModuleButtionId }));
         }
-        ///// <summary>
-        ///// 批量删除关联信息
-        ///// </summary>
-        ///// <param name="obj"></param>
-        ///// <returns></returns>
-        //public async Task<IActionResult> DelByRoleID(Guid[] obj)
-        //{
-        //    return Json(await _roleButtionService.DelByRoleID(obj));
-        //}
+
+        public async Task<IActionResult> QuertUserIdButtion()
+        {
+            return Json("");
+        }
     }
 }

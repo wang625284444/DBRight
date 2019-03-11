@@ -1,14 +1,18 @@
 ﻿using Autofac;
 using DB.IRepository.limit;
-using DB.IService;
 using DB.Repostitory.limit;
+using DB.IService;
 using DB.Service;
-using DB.UnitOfWork;
+using DB.UnitOfWork.IServices;
+using DB.UnitOfWork.Services;
 using DB.Utils.Extend;
 using DB.Utils.Redis;
 
 namespace DB.Web.Autofac
 {
+    /// <summary>
+    /// 使用Autofac实现控制反转IoC
+    /// </summary>
     public class RegestAutoFac : Module
     {
         protected override void Load(ContainerBuilder builder)
@@ -16,7 +20,7 @@ namespace DB.Web.Autofac
             builder.RegisterType<HttpContextUtil>().As<HttpContextUtil>();
             builder.RegisterType<RedisCacheUtil>().As<RedisCacheUtil>();
 
-            builder.RegisterType<Workreflex>().As<Workreflex>();
+            builder.RegisterType<WorkServices>().As<IWorkServices>();
 
             builder.RegisterType<UserRepository>().As<IUserRepository>();
             builder.RegisterType<UsersService>().As<IUserService>();

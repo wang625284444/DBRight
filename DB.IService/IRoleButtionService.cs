@@ -32,5 +32,7 @@ namespace DB.IService
         /// <param name="obj">按钮Id</param>
         /// <returns></returns>
         Task<BaseResult<bool>> AddRoleButtion(Guid guid, string obj);
+
+        Task<BaseResult<bool>> QuertUserIdButtion(Guid guid);
     }
 }

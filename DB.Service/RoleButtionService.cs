@@ -94,5 +94,15 @@ namespace DB.Service
                 return new BaseResult<bool>("模块保存失败！", false);
             }
         }
+        /// <summary>
+        /// 根据当前登陆人查询当前模块按钮
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <returns></returns>
+        public async Task<BaseResult<bool>> QuertUserIdButtion(Guid guid)
+        {
+
+            return new BaseResult<bool>("查询按钮失败", false);
+        }
     }
 }

@@ -27,7 +27,11 @@ namespace DB.Entity.Workflow
         /// 实体名称
         /// </summary>
         public string EntityName { get; set; }
+        /// <summary>
+        /// 提交留言
+        /// </summary>
+        public string Message { get; set; }
 
-        
+
     }
 }

@@ -22,7 +22,6 @@
                 labelWidth: 60,
                 xtype: 'textfield',
                 width: 200
-
             }, {
                 id: 'text_UserAccount',
                 fieldLabel: '用户账号',
@@ -141,7 +140,6 @@
                                 success: function (response) {
                                     var obj = JSON.parse(response.responseText);
                                     Ext.Msg.alert('提示', obj.status_message);
-                                    store.load();
                                 },
                                 failure: function (response) {
                                     Ext.Msg.alert('失败', '请求超时或网络故障，错误编号：' + response.status);
@@ -162,7 +160,8 @@
                     handler: function () {
                         var selectedData = grid.getSelectionModel().getSelection();
                         if (selectedData.length !== 0) {
-                            WinEstablish("用户提交", "UserEstablish", selectedData[0].id);
+                            WinEstablish("用户提交", "UserEstablish", selectedData, store);
+                            
                         } else {
                             Ext.Msg.alert('提示', '请选择数据，最少一条！');
                         }

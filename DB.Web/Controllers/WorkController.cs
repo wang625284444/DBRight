@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using DB.UnitOfWork;
+using DB.Entity.Model;
+using DB.UnitOfWork.IServices;
+using DB.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -10,20 +9,24 @@ namespace DB.Web.Controllers
 {
     public class WorkController : DBController
     {
-        private Workreflex _workBusiness { get; set; }
-        public WorkController(Workreflex workBusiness)
+        private IWorkServices _workServices { get; set; }
+        public WorkController(IWorkServices workServices)
         {
-            this._workBusiness = workBusiness;
+            this._workServices = workServices;
         }
         public IActionResult Index()
         {
             return View();
         }
+        /// <summary>
+        /// 用户提交数据
+        /// </summary>
         [HttpPost]
-        public IActionResult WorkEstablish(string establish, Guid guid)
+        public IActionResult UserEstablish(WorkModels work)
         {
-            _workBusiness.Establish(establish, guid);
-            return null;
+            var type = _workServices.GetEntityUpdate<UserEntity>(work.guid, "UserEntity", work.message);
+            return Json(type);
         }
+        //角色审批
     }
 }
