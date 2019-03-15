@@ -1,9 +1,15 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace DB.Entity.Assistance
 {
     public abstract class AssistanceEntity
     {
+        /// <summary>
+        /// 主键ID
+        /// </summary>
+        [Key]
+        public Guid Id { get; set; }
         /// <summary>
         /// 数据状态
         /// </summary>

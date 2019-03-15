@@ -24,9 +24,6 @@ namespace DB.Entity
         public DbSet<WorkflowApprovalInfoEntity> T_WorkflowApprovalInfo { get; set; }
 
         public DbSet<WorkflowProcessEntity> T_WorkflowProcess { get; set; }
-
-
-
-
+        
     }
 }

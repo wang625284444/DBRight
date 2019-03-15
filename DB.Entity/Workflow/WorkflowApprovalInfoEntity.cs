@@ -1,7 +1,5 @@
 ﻿using DB.Entity.Assistance;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using static DB.Entity.Enum.WorkflowEnum;
 
 namespace DB.Entity.Workflow
@@ -11,10 +9,6 @@ namespace DB.Entity.Workflow
     /// </summary>
     public class WorkflowApprovalInfoEntity: AssistanceEntity
     {
-        /// <summary>
-        /// 主键ID
-        /// </summary>
-        public Guid Id { get; set; }
         /// <summary>
         /// 实体数据ID
         /// </summary>
@@ -31,7 +25,5 @@ namespace DB.Entity.Workflow
         /// 提交留言
         /// </summary>
         public string Message { get; set; }
-
-
     }
 }

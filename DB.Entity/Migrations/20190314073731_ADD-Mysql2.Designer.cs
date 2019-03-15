@@ -3,23 +3,21 @@ using System;
 using DB.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DB.Entity.Migrations
 {
     [DbContext(typeof(BaseDbContext))]
-    [Migration("20190129085218_Add-DBRight3")]
-    partial class AddDBRight3
+    [Migration("20190314073731_ADD-Mysql2")]
+    partial class ADDMysql2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("DB.Entity.Model.ModuleButtionEntity", b =>
                 {
@@ -227,24 +225,30 @@ namespace DB.Entity.Migrations
                     b.ToTable("T_UserRole");
                 });
 
-            modelBuilder.Entity("DB.Entity.Workflow.WorkflowConfigureEntity", b =>
+            modelBuilder.Entity("DB.Entity.Workflow.WorkflowApprovalInfoEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<string>("ConfigureName");
 
                     b.Property<DateTime>("CreationTime");
 
                     b.Property<string>("CreationUser");
 
+                    b.Property<Guid>("EntityDataId");
+
+                    b.Property<string>("EntityName");
+
                     b.Property<bool>("IsStatus");
+
+                    b.Property<string>("Message");
 
                     b.Property<DateTime>("UpdateTime");
 
+                    b.Property<int>("WorkflowStatus");
+
                     b.HasKey("Id");
 
-                    b.ToTable("T_RorkflowConfigure");
+                    b.ToTable("T_WorkflowApprovalInfo");
                 });
 
             modelBuilder.Entity("DB.Entity.Workflow.WorkflowProcessEntity", b =>
@@ -264,13 +268,7 @@ namespace DB.Entity.Migrations
 
                     b.Property<DateTime>("UpdateTime");
 
-                    b.Property<Guid?>("WorkflowConfigureEntityId");
-
-                    b.Property<Guid>("WorkflowConfigureId");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("WorkflowConfigureEntityId");
 
                     b.ToTable("T_WorkflowProcess");
                 });
@@ -320,13 +318,6 @@ namespace DB.Entity.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("DB.Entity.Workflow.WorkflowProcessEntity", b =>
-                {
-                    b.HasOne("DB.Entity.Workflow.WorkflowConfigureEntity", "WorkflowConfigureEntity")
-                        .WithMany()
-                        .HasForeignKey("WorkflowConfigureEntityId");
                 });
 #pragma warning restore 612, 618
         }

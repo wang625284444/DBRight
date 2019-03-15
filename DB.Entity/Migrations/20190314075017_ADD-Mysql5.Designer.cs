@@ -3,23 +3,21 @@ using System;
 using DB.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DB.Entity.Migrations
 {
     [DbContext(typeof(BaseDbContext))]
-    [Migration("20190218104329_DBRight7")]
-    partial class DBRight7
+    [Migration("20190314075017_ADD-Mysql5")]
+    partial class ADDMysql5
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("DB.Entity.Model.ModuleButtionEntity", b =>
                 {
@@ -236,13 +234,17 @@ namespace DB.Entity.Migrations
 
                     b.Property<string>("CreationUser");
 
+                    b.Property<Guid>("EntityDataId");
+
                     b.Property<string>("EntityName");
 
                     b.Property<bool>("IsStatus");
 
-                    b.Property<string>("Status");
+                    b.Property<string>("Message");
 
                     b.Property<DateTime>("UpdateTime");
+
+                    b.Property<int>("WorkflowStatus");
 
                     b.HasKey("Id");
 
@@ -265,8 +267,6 @@ namespace DB.Entity.Migrations
                     b.Property<string>("SequenceName");
 
                     b.Property<DateTime>("UpdateTime");
-
-                    b.Property<Guid>("WorkflowConfigureId");
 
                     b.HasKey("Id");
 

@@ -27,8 +27,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DB.WebApi", "DB.WebApi\DB.W
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DB.Web", "DB.Web\DB.Web.csproj", "{CEB3166F-F5E5-4F4C-AFC4-F5F8D7BF11B2}"
 EndProject
-Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "VueWeb", "VueWeb\VueWeb.njsproj", "{01DCEAF5-5A98-4D50-9068-9422957AAF4F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,10 +73,6 @@ Global
 		{CEB3166F-F5E5-4F4C-AFC4-F5F8D7BF11B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEB3166F-F5E5-4F4C-AFC4-F5F8D7BF11B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CEB3166F-F5E5-4F4C-AFC4-F5F8D7BF11B2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{01DCEAF5-5A98-4D50-9068-9422957AAF4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{01DCEAF5-5A98-4D50-9068-9422957AAF4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{01DCEAF5-5A98-4D50-9068-9422957AAF4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{01DCEAF5-5A98-4D50-9068-9422957AAF4F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

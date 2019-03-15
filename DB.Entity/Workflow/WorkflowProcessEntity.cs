@@ -9,10 +9,6 @@ namespace DB.Entity.Workflow
     public class WorkflowProcessEntity: AssistanceEntity
     {
         /// <summary>
-        /// 主键ID
-        /// </summary>
-        public Guid Id { get; set; }
-        /// <summary>
         /// 审核顺序
         /// </summary>
         public long Sequence { get; set; }
@@ -20,9 +16,5 @@ namespace DB.Entity.Workflow
         /// 审核顺序名称
         /// </summary>
         public string SequenceName { get; set; }
-        /// <summary>
-        /// 外键ID
-        /// </summary>
-        public Guid WorkflowConfigureId { get; set; }
     }
 }

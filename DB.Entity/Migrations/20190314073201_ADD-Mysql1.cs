@@ -2,7 +2,7 @@
 
 namespace DB.Entity.Migrations
 {
-    public partial class DBRight10 : Migration
+    public partial class ADDMysql1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
