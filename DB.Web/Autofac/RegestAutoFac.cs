@@ -18,7 +18,7 @@ namespace DB.Web.Autofac
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<HttpContextUtil>().As<HttpContextUtil>();
-            builder.RegisterType<RedisCacheUtil>().As<RedisCacheUtil>();
+            builder.RegisterType<RedisUtil>().As<RedisUtil>();
 
             builder.RegisterType<WorkServices>().As<IWorkServices>();
 

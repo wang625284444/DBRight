@@ -27,7 +27,12 @@ namespace DB.Utils.Extend
         {
             responseCookies.Delete(key);
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cookies"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
         internal static string Get(this IRequestCookiesFeature cookies, string key)
         {
             cookies.Cookies.TryGetValue(key, out string value);
@@ -35,8 +40,7 @@ namespace DB.Utils.Extend
                 value = string.Empty;
             return value;
         }
-
-
+        
         /// <summary>
         /// 设置本地cookie
         /// </summary>

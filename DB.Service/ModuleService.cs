@@ -4,6 +4,7 @@ using DB.IRepository.limit;
 using DB.IService;
 using DB.Utils.Common;
 using DB.Utils.Extend;
+using DB.Utils.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,10 +17,12 @@ namespace DB.Service
     {
         private IModuleRepository _moduleRepository { get; set; }
         private HttpContextUtil _httpContextUtil { get; set; }
-        public ModuleService(IModuleRepository moduleRepository, HttpContextUtil httpContextUtil)
+        private RedisUtil _redisUtil { get; set; }
+        public ModuleService(IModuleRepository moduleRepository, HttpContextUtil httpContextUtil, RedisUtil redisUtil)
         {
             this._moduleRepository = moduleRepository;
             this._httpContextUtil = httpContextUtil;
+            this._redisUtil = redisUtil;
         }
         /// <summary>
         /// 查询tree
@@ -44,7 +47,7 @@ namespace DB.Service
             var _modulelist = await _moduleRepository.GetListAllAsync(where);
             if (_modulelist != null)
             {
-                _httpContextUtil.setObjectAsJson(KeyUtil.module_info, _modulelist);
+                _redisUtil.SetListValue(_redisUtil.module(), _modulelist);
             }
             return new BaseResult<ModuleEntity>("根据用户查询模块", _modulelist);
         }

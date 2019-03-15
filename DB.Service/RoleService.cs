@@ -10,6 +10,7 @@ using DB.Utils.Common;
 using System.Linq;
 using System.Collections.Generic;
 using static DB.Entity.Enum.WorkflowEnum;
+using DB.Utils.Redis;
 
 namespace DB.Service
 {
@@ -17,10 +18,12 @@ namespace DB.Service
     {
         private IRoleRepository _roleRepository { get; set; }
         private HttpContextUtil _httpContextUtil { get; set; }
-        public RoleService(IRoleRepository roleRepository, HttpContextUtil httpContextUtil)
+        private RedisUtil _redisUtil { get; set; }
+        public RoleService(IRoleRepository roleRepository, HttpContextUtil httpContextUtil, RedisUtil redisUtil)
         {
             this._roleRepository = roleRepository;
             this._httpContextUtil = httpContextUtil;
+            this._redisUtil = redisUtil;
         }
 
         /// <summary>
@@ -58,7 +61,7 @@ namespace DB.Service
         /// <returns></returns>
         public async Task<BaseResult<RoleEntity>> QueryById()
         {
-            var usersEntity = _httpContextUtil.GetObjectAsJson<UserEntity>(KeyUtil.user_info);
+            var usersEntity = _httpContextUtil.GetSession<UserEntity>(KeyUtil.user_info);
             Expression<Func<RoleEntity, bool>> where = LinqUtil.True<RoleEntity>();
             where = where.AndAlso(e => e.IsStatus == true || e.Id == usersEntity.Id);
             var _rolelist = await _roleRepository.GetAsync(where);
@@ -74,12 +77,12 @@ namespace DB.Service
         {
             Expression<Func<RoleEntity, bool>> where = LinqUtil.True<RoleEntity>();
             where = where.AndAlso(e => e.IsStatus == false || e.Id == guid);
-            var _rolelist = await _roleRepository.GetAsync(where);
-            if (_rolelist != null)
+            var rolelist = await _roleRepository.GetAsync(where);
+            if (rolelist != null)
             {
-                _httpContextUtil.setObjectAsJson(KeyUtil.role_info, _rolelist);
+                _redisUtil.SetTValue(_redisUtil.role(), rolelist);
             }
-            return new BaseResult<RoleEntity>(_rolelist);
+            return new BaseResult<RoleEntity>(rolelist);
         }
 
         /// <summary>
@@ -118,7 +121,7 @@ namespace DB.Service
         public async Task<BaseResult<bool>> DelRoleId(string obj)
         {
             List<RoleEntity> roleListEntity = JsonNetHelper.DeserializeObject<List<RoleEntity>>(obj);
-            var ser = roleListEntity.Where(e => e.Id == _httpContextUtil.GetObjectAsJson<RoleEntity>(KeyUtil.role_info).Id);
+            var ser = roleListEntity.Where(e => e.Id == _redisUtil.GetTVlues<RoleEntity>(_redisUtil.role()).Id);
             if (ser.Count() == 0)
             {
                 var total = await _roleRepository.DeleteListAsync(roleListEntity);

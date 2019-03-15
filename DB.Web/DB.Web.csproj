@@ -28,7 +28,6 @@
     <ProjectReference Include="..\DB.Entity\DB.Entity.csproj" />
     <ProjectReference Include="..\DB.IRepostitory\DB.IRepository.csproj" />
     <ProjectReference Include="..\DB.IService\DB.IService.csproj" />
-    <ProjectReference Include="..\DB.Redis\DB.Redis.csproj" />
     <ProjectReference Include="..\DB.Repostitory\DB.Repostitory.csproj" />
     <ProjectReference Include="..\DB.Service\DB.Service.csproj" />
     <ProjectReference Include="..\DB.UnitOfWork\DB.UnitOfWork.csproj" />

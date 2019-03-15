@@ -4,6 +4,7 @@ using DB.IRepository.limit;
 using DB.IService;
 using DB.Utils.Common;
 using DB.Utils.Extend;
+using DB.Utils.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,10 +22,14 @@ namespace DB.Service
         //注入HttpContext对象
         private HttpContextUtil _httpContextUtil { get; set; }
 
-        public UsersService(IUserRepository userRepository, HttpContextUtil httpContextUtil)
+        private RedisUtil _redisUtil { get; set; }
+        
+
+        public UsersService(IUserRepository userRepository, HttpContextUtil httpContextUtil, RedisUtil redisUtil)
         {
             this._userRepository = userRepository;
             this._httpContextUtil = httpContextUtil;
+            this._redisUtil = redisUtil;
         }
 
         /// <summary>
@@ -64,7 +69,11 @@ namespace DB.Service
                         }
                         else
                         {
-                            _httpContextUtil.setObjectAsJson(KeyUtil.user_info, usersEntity);
+                            //创建redis头部
+                            _httpContextUtil.SetSession(KeyUtil.user_Number, usersEntity.UserNumber);
+                            //_httpContextUtil.SetSession(KeyUtil.user_info, _redisKeyUtil.user());
+                            //将用户信息写入redis
+                            _redisUtil.SetTValue(_redisUtil.user(), usersEntity);
                             return new BaseResult<UserEntity>(usersEntity);
                         }
                     case StatusEnum.Remind1:
@@ -124,6 +133,7 @@ namespace DB.Service
             if (userEntity != null)
             {
                 userEntity.Status = statusEnum;
+                userEntity.CreationUser = "";
                 var istype = await _userRepository.UpdateAsync(userEntity);
                 if (istype)
                 {
@@ -275,7 +285,7 @@ namespace DB.Service
         public async Task<BaseResult<bool>> DelUserId(string obj)
         {
             List<UserEntity> userListEntity = JsonNetHelper.DeserializeObject<List<UserEntity>>(obj);
-            var ser = userListEntity.Where(e => e.Id == _httpContextUtil.GetObjectAsJson<UserEntity>(KeyUtil.user_info).Id);
+            var ser = userListEntity.Where(e => e.Id == _httpContextUtil.GetSession<UserEntity>(KeyUtil.user_info).Id);
             if (ser.Count() == 0)
             {
                 var total = await _userRepository.DeleteListAsync(userListEntity);
@@ -298,7 +308,7 @@ namespace DB.Service
         /// <returns></returns>
         public async Task<BaseResult<bool>> UpdateStatusUserId(Guid guid)
         {
-            if (_httpContextUtil.GetObjectAsJson<UserEntity>(KeyUtil.user_info).Id != guid)
+            if (_httpContextUtil.GetSession<UserEntity>(KeyUtil.user_info).Id != guid)
             {
                 string statusName = string.Empty;
                 Expression<Func<UserEntity, bool>> where = LinqUtil.True<UserEntity>();

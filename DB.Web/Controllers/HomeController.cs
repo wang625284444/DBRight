@@ -78,7 +78,7 @@ namespace DB.Web.Controllers
         [HttpGet]
         public async Task<ActionResult> QuitLanding()
         {
-            _httpContextUtil.removeObjectAsJson(KeyUtil.user_info);
+            _httpContextUtil.RemoveSession(KeyUtil.user_info);
             return Json("true");
         }
     }

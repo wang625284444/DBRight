@@ -42,7 +42,7 @@ namespace DB.Web.Controllers
             if (isDefined) return;
             byte[] result;
             //获取session
-            filterContext.HttpContext.Session.TryGetValue(KeyUtil.user_info, out result);
+            filterContext.HttpContext.Session.TryGetValue(KeyUtil.user_Number, out result);
             //判断session是否存在
             if (result == null)
             {
@@ -90,27 +90,7 @@ namespace DB.Web.Controllers
         /// 获取当前登陆人角色权限关系
         /// </summary>
         public RoleButtionEntity GetRoleButtionSession { get; private set; }
-        /// <summary>
-        /// 角色关系Session读取
-        /// </summary>
-        /// <returns></returns>
-        private RoleButtionEntity getRoleButtionSession()
-        {
-            try
-            {
-                string userJson = HttpContext.Session.GetString(KeyUtil.rolebuttion_info);
-                if (string.IsNullOrEmpty(userJson))
-                {
-                    return null;
-                }
-                RoleButtionEntity GetUserSession = JsonNetHelper.DeserializeObject<RoleButtionEntity>(userJson);
-                return GetUserSession;
-            }
-            catch (System.Exception e)
-            {
-                return null;
-            }
-        }
+       
         /// <summary>
         /// 重构方法(如果给前台响应日期时间调用此方法方法)
         /// </summary>

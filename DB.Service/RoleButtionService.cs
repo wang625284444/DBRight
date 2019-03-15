@@ -4,6 +4,7 @@ using DB.IRepository.limit;
 using DB.IService;
 using DB.Utils.Common;
 using DB.Utils.Extend;
+using DB.Utils.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,10 +18,12 @@ namespace DB.Service
     {
         private IRoleButtionRepository _roleButtionRepository { get; set; }
         private HttpContextUtil _httpContextUtil { get; set; }
-        public RoleButtionService(IRoleButtionRepository roleButtionRepository, HttpContextUtil httpContextUtil)
+        private RedisUtil _redisUtil { get; set; }
+        public RoleButtionService(IRoleButtionRepository roleButtionRepository, HttpContextUtil httpContextUtil, RedisUtil redisUtil)
         {
             this._roleButtionRepository = roleButtionRepository;
             this._httpContextUtil = httpContextUtil;
+            this._redisUtil = redisUtil;
         }
 
         /// <summary>
@@ -29,13 +32,15 @@ namespace DB.Service
         /// <returns>BaseResult</returns>
         public async Task<BaseResult<List<RoleButtionEntity>>> QueryByRoleID()
         {
-            var roleEntity = _httpContextUtil.GetObjectAsJson<RoleEntity>(KeyUtil.role_info);
+            //读取Redis角色信息
+            var roleEntity = _redisUtil.GetTVlues<RoleEntity>(_redisUtil.role());
             Expression<Func<RoleButtionEntity, bool>> where = LinqUtil.True<RoleButtionEntity>();
             where = where.AndAlso(e => e.RoleId == roleEntity.Id);
             IQueryable<RoleButtionEntity> list = await _roleButtionRepository.GetAllAsync(where);
             if (list != null)
             {
-                _httpContextUtil.setObjectAsJson(KeyUtil.rolebuttion_info, list.ToList());
+                //将用户按钮写入redis
+                _redisUtil.SetListValue(_redisUtil.rolebuttion(), list.ToList());
             }
             return new BaseResult<List<RoleButtionEntity>>(list.ToList());
         }
