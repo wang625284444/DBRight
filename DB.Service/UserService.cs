@@ -4,6 +4,7 @@ using DB.IRepository.limit;
 using DB.IService;
 using DB.Utils.Common;
 using DB.Utils.Extend;
+using DB.Utils.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,10 +22,14 @@ namespace DB.Service
         //注入HttpContext对象
         private HttpContextUtil _httpContextUtil { get; set; }
 
-        public UsersService(IUserRepository userRepository, HttpContextUtil httpContextUtil)
+        private RedisUtil _redisUtil { get; set; }
+
+
+        public UsersService(IUserRepository userRepository, HttpContextUtil httpContextUtil, RedisUtil redisUtil)
         {
             this._userRepository = userRepository;
             this._httpContextUtil = httpContextUtil;
+            this._redisUtil = redisUtil;
         }
 
         /// <summary>
@@ -41,7 +46,7 @@ namespace DB.Service
             }
             Expression<Func<UserEntity, bool>> where = LinqUtil.True<UserEntity>();
             //根据账号获取用户信息
-            where = where.AndAlso(e => e.UserAccount == userAccount && e.IsStatus == false);
+            where = where.AndAlso(e => e.UserAccount == userAccount && e.IsStatus == true);
             var usersEntity = await _userRepository.GetAsync(where);
             if (usersEntity != null)
             {
@@ -64,7 +69,9 @@ namespace DB.Service
                         }
                         else
                         {
-                            _httpContextUtil.setObjectAsJson(KeyUtil.user_info, usersEntity);
+                            GetSession(usersEntity);
+                            //将用户信息写入redis
+                            _redisUtil.SetTValue(_redisUtil.user(), usersEntity);
                             return new BaseResult<UserEntity>(usersEntity);
                         }
                     case StatusEnum.Remind1:
@@ -75,6 +82,7 @@ namespace DB.Service
                         }
                         else
                         {
+                            GetSession(usersEntity);
                             //将账号回复正常
                             return await ModifyStatus(usersEntity, StatusEnum.Normal);
                         }
@@ -86,6 +94,7 @@ namespace DB.Service
                         }
                         else
                         {
+                            GetSession(usersEntity);
                             //将账号回复正常
                             return await ModifyStatus(usersEntity, StatusEnum.Normal);
                         }
@@ -97,6 +106,7 @@ namespace DB.Service
                         }
                         else
                         {
+                            GetSession(usersEntity);
                             //将账号回复正常
                             return await ModifyStatus(usersEntity, StatusEnum.Normal);
                         }
@@ -124,6 +134,7 @@ namespace DB.Service
             if (userEntity != null)
             {
                 userEntity.Status = statusEnum;
+                userEntity.CreationUser = "";
                 var istype = await _userRepository.UpdateAsync(userEntity);
                 if (istype)
                 {
@@ -135,19 +146,19 @@ namespace DB.Service
                             return new BaseResult<UserEntity>(userEntity);
                         case StatusEnum.Remind1:
                             //锁定一次
-                            return new BaseResult<UserEntity>("用户错误2次，错误3次锁定账号！");
+                            return new BaseResult<UserEntity>("用户错误2次，错误3次锁定账号！", false);
                         case StatusEnum.Remind2:
                             //锁定两次
-                            return new BaseResult<UserEntity>("用户错误2次，错误2次锁定账号！");
+                            return new BaseResult<UserEntity>("用户错误2次，错误2次锁定账号！", false);
                         case StatusEnum.Remind3:
                             //锁定三次
-                            return new BaseResult<UserEntity>("用户错误3次，错误1次锁定账号！");
+                            return new BaseResult<UserEntity>("用户错误3次，错误1次锁定账号！", false);
                         case StatusEnum.Locking:
                             //锁定账号
-                            return new BaseResult<UserEntity>("用户错误3次，账号锁定！");
+                            return new BaseResult<UserEntity>("用户错误3次，账号锁定！", false);
                         case StatusEnum.Disable:
                             //锁定禁用
-                            return new BaseResult<UserEntity>("当前用户已禁用！");
+                            return new BaseResult<UserEntity>("当前用户已禁用！", false);
                     }
                     //操作成功
                     return new BaseResult<UserEntity>("登陆成功！");
@@ -165,6 +176,13 @@ namespace DB.Service
             }
         }
 
+        public void GetSession(UserEntity userEntity)
+        {
+            _httpContextUtil.SetSession(KeyUtil.user_info, userEntity);
+            //创建redis头部
+            _httpContextUtil.SetSession(KeyUtil.user_Number, userEntity.UserNumber);
+        }
+
         /// <summary>
         /// 查询用户信息
         /// </summary>
@@ -180,10 +198,18 @@ namespace DB.Service
             {
                 where = where.AndAlso(e => e.UserNumber == userEntity.UserNumber);
             }
-            //if (userEntity.Status == StatusEnum.Normal)
-            //{
-            //    where = where.AndAlso(e => e.Status == userEntity.Status);
-            //}
+            if (userEntity.UserName != null)
+            {
+                where = where.AndAlso(e => e.UserName == userEntity.UserName);
+            }
+            if (userEntity.UserAccount != null)
+            {
+                where = where.AndAlso(e => e.UserAccount == userEntity.UserAccount);
+            }
+            if (userEntity.WorkflowStatus != null)
+            {
+                where = where.AndAlso(e => e.WorkflowStatus == userEntity.WorkflowStatus);
+            }
 
             var total = await _userRepository.CountAsync(where);
             IQueryable<UserEntity> list = await _userRepository.GetPageAllAsync<UserEntity, DateTime, UserEntity>(pageIndex, pageSize, where, c => c.CreationTime, null);
@@ -196,9 +222,8 @@ namespace DB.Service
         /// <returns>用户编码</returns>
         public async Task<Pager<string>> QueryUserNumber()
         {
-            //    Expression<Func<UsersEntity, bool>> where = LinqUtil.True<UsersEntity>();
-            //    where.AndAlso(e => e.UserNumber.Max());
-            //    var total = await userRepository.GetAsync(where);
+            Expression<Func<UserEntity, bool>> where = LinqUtil.True<UserEntity>();
+            var total = await _userRepository.GetAsync(where);
             return new Pager<string>(100, "");
         }
 
@@ -210,15 +235,11 @@ namespace DB.Service
         public async Task<BaseResult<bool>> AddUser(UserEntity userEntity)
         {
             Expression<Func<UserEntity, bool>> where = LinqUtil.True<UserEntity>();
-            //根据账号获取用户信息
             where = where.AndAlso(e => e.UserAccount == userEntity.UserAccount);
-            bool _userEntity = await _userRepository.IsExistAsync(where);
-            //验证用户是否存在
-            if (_userEntity == false)
+            if (!await _userRepository.IsExistAsync(where))
             {
-                bool AddType = await _userRepository.AddAsync(userEntity);
-                //判断是否添加成功
-                if (AddType == true)
+                userEntity.WorkflowStatus = WorkflowStatus.ApprovalNotSubmitted;
+                if (await _userRepository.AddAsync(userEntity))
                 {
                     return new BaseResult<bool>("用户添加成功！");
                 }
@@ -231,8 +252,6 @@ namespace DB.Service
             {
                 return new BaseResult<bool>("用户已存在，请重新注册!", false);
             }
-
-
         }
 
         /// <summary>
@@ -274,7 +293,7 @@ namespace DB.Service
         public async Task<BaseResult<bool>> DelUserId(string obj)
         {
             List<UserEntity> userListEntity = JsonNetHelper.DeserializeObject<List<UserEntity>>(obj);
-            var ser = userListEntity.Where(e => e.Id == _httpContextUtil.GetObjectAsJson<UserEntity>(KeyUtil.user_info).Id);
+            var ser = userListEntity.Where(e => e.Id == _httpContextUtil.GetSession<UserEntity>(KeyUtil.user_info).Id);
             if (ser.Count() == 0)
             {
                 var total = await _userRepository.DeleteListAsync(userListEntity);
@@ -297,7 +316,7 @@ namespace DB.Service
         /// <returns></returns>
         public async Task<BaseResult<bool>> UpdateStatusUserId(Guid guid)
         {
-            if (_httpContextUtil.GetObjectAsJson<UserEntity>(KeyUtil.user_info).Id != guid)
+            if (_httpContextUtil.GetSession<UserEntity>(KeyUtil.user_info).Id != guid)
             {
                 string statusName = string.Empty;
                 Expression<Func<UserEntity, bool>> where = LinqUtil.True<UserEntity>();

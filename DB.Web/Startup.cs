@@ -27,14 +27,14 @@ namespace DB.Web
         {
             //MYsql引用
             //DB.Entity nuget Pomelo.EntityFrameworkCore.MySql
-            //services.AddDbContext<BaseDbContext>(options => options.UseMySql(Configuration.GetConnectionString("MySql"),b => { b.MigrationsAssembly("MYSQL"); }));
+            services.AddDbContext<BaseDbContext>(options => options.UseMySql(Configuration.GetConnectionString("Datadbec")));
 
             //初始化数据库
             //DB.Entity nuget Microsoft.EntityFrameworkCore.SqlServer
             //2012版本
             //services.AddDbContext<BaseDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Datadbec")));
             //2005-2008R2版本
-            services.AddDbContext<BaseDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Datadbec"), b => b.UseRowNumberForPaging()));
+            //services.AddDbContext<BaseDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Datadbec"), b => b.UseRowNumberForPaging()));
 
             //注册Redis
 

@@ -62,22 +62,22 @@ namespace DB.Repostitory
             return await ctx.SaveChangesAsync() > 0 ? true : await Task.Run(() => false);
         }
 
-        public virtual bool AddOrUpdate(T entity, bool isSave)
+        public virtual bool AddOrUpdate(T entity)
         {
             if (entity == null)
             {
                 return false;
             }
-            return isSave ? Add(entity) : Update(entity);
+            return Add(entity);
         }
 
-        public virtual async Task<bool> AddOrUpdateAsync(T entity, bool isSave)
+        public virtual async Task<bool> AddOrUpdateAsync(T entity)
         {
             if (entity == null)
             {
                 return await Task.Run(() => false);
             }
-            return isSave ? await AddAsync(entity) : await UpdateAsync(entity);
+            return  await AddAsync(entity);
         }
 
         #endregion

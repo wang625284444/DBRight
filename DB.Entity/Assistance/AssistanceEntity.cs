@@ -1,15 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel.DataAnnotations;
 
 namespace DB.Entity.Assistance
 {
-    public abstract class AssistanceEntity : WorkflowEntity
+    public abstract class AssistanceEntity
     {
+        /// <summary>
+        /// 主键ID
+        /// </summary>
+        [Key]
+        public Guid Id { get; set; }
         /// <summary>
         /// 数据状态
         /// </summary>
-        public bool IsStatus { get; set; }
+        public bool IsStatus { get; set; } = true;
         /// <summary>
         /// 创建时间/只读
         /// </summary>

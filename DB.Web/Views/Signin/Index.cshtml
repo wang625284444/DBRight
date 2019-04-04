@@ -2,40 +2,81 @@
 @{
     ViewData["Title"] = "Login";
 }
+<head>
+    <base id="base" href="${base}">
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <link rel="stylesheet" type="text/css" href="~/css/login/normalize.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/login/index.css" />
+    <!--必要样式-->
+    <link rel="stylesheet" type="text/css" href="~/css/login/component.css" />
+    <link rel="stylesheet" type="text/css" href="~/layui/css/layui.css" />
+    <script type="text/javascript" src="~/js/jquery.js"></script>
+    <script type="text/javascript" src="~/layui/layui.js"></script>
+</head>
+<body>
+    <div class="container demo-1">
+        <div class="content">
+            <div id="large-header" class="large-header">
+                <canvas id="demo-canvas"></canvas>
+                <div class="logo_box">
+                    <h3>后台管理</h3>
+                    <form action="#" name="f" method="post">
+                        <div class="input_outer">
+                            <span class="u_user"></span>
+                            <input name="login_username" class="text" style="color: #FFFFFF !important" type="text" placeholder="请输入账户">
+                        </div>
+                        <div class="input_outer">
+                            <span class="us_uer"></span>
+                            <input name="login_password" class="text" style="color: #FFFFFF !important; position:absolute; z-index:100;" value="" type="password" placeholder="请输入密码">
+                        </div>
+                        <div class="mb2"><a id="sub" lay-filter="sub" class="act-but submit" href="javascript:;" style="color: #FFFFFF">登录</a></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div><!-- /container -->
+    <script src="~/js/script/signin/TweenLite.min.js"></script>
+    <script src="~/js/script/signin/EasePack.min.js"></script>
+    <script src="~/js/script/signin/rAF.js"></script>
+    <script src="~/js/script/signin/index.js"></script>
+</body>
+<script>
+    //加载弹出层组件
+    layui.use('layer', function () {
 
+        var layer = layui.layer;
 
-<link href="~/css/login/index.css" rel="stylesheet" />
-<script src="~/js/jquery.js"></script>
-<script src="~/js/script/signin/index.js"></script>
+        //登录的点击事件
+        $("#sub").on("click", function () {
+            login();
+        })
 
+        $("body").keydown(function () {
+            if (event.keyCode == "13") {
+                login();
+            }
+        })
 
-<div>
-    <table class="TableStyle">
-        <tr>
-            <td class="FontStyle"> 账号:</td>
-            <td>
-                <input type="text" id="text_userAccount" class="TextboxStyle" />
-            </td>
-        </tr>
-        <tr>
-            <td class="FontStyle">  密码: </td>
-            <td>
-                <input type="password" id="text_userPasword" class="TextboxStyle" />
-            </td>
-        </tr>
-        <tr>
-            <td class="FontStyle"> 验证码: </td>
-            <td>
-                <input type="text" value="" id="text_verificationcode" class="VailidImg" />
-                <span id="checkCode" class="Create"></span>
-
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                <input type="button" id="login" value="登陆" />
-            </td>
-        </tr>
-    </table>
-</div>
+        //登录函数
+        function login() {
+            var username = $("input[name='login_username']").val();
+            var password = $("input[name='login_password']").val();
+            $.ajax({
+                type: "GET",
+                url: "/Signin/Signin?" + "userAccount=" + username + "&userPasword=" + password,
+                dataType: "json",
+                success: function (data) {
+                    if (data.status_Type) {
+                        $(window).attr('location', '/Home/Index');
+                    } else {
+                        layer.alert(data.status_message, { icon: 2 });
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(errorThrown);
+                }
+            })
+        }
+    })
+</script>

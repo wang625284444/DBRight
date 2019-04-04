@@ -1,0 +1,5 @@
+执行”Add-Migration 生成文件名称  
+
+执行”Update-Database
+
+如果更细那数据库表结构Add-Migration  一个新的名称  会生成出新的文件，再执行Update-Database

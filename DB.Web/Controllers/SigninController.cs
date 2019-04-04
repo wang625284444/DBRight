@@ -1,5 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using DB.Entity.Model;
 using DB.IService;
+using DB.UnitOfWork;
 using DB.Utils.Redis;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,6 +13,8 @@ namespace DB.Web.Controllers
     {
         #region 构造函数
         private IUserService _userService { get; set; }
+
+        
 
         public SigninController(IUserService userService)
         {
@@ -31,9 +36,6 @@ namespace DB.Web.Controllers
         public async Task<ActionResult> Signin(string userAccount, string userPasword)
         {
             var login = await _userService.Login(userAccount, userPasword);
-            //ActionExecutingContext filterContext;
-            //filterContext.Result = RedirectToAction("Index", "Home");
-            //return RedirectToRoute(new { controller = "Home", action = "Index" });
             return Json(login);
         }
         #endregion

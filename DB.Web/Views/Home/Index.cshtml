@@ -2,9 +2,61 @@
 @{
     ViewData["Title"] = "首页";
 }
-<link href="~/ext/build/theme-neptune/resources/theme-neptune-all.css" rel="stylesheet" />
-<link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
-<link href="~/css/home/Index.css" rel="stylesheet" />
-<script src="~/ext/build/ext-all.js"></script>
+
+<script src="~/js/jquery.js"></script>
+<script src="~/layui/layui.js"></script>
 <script src="~/js/script/home/Index.js"></script>
-<script src="~/ext/build/locale-zh_CN.js"></script>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>DBR管理系统</title>
+    <link rel="stylesheet" href="~/layui/css/layui.css">
+</head>
+<body class="layui-layout-body">
+    <div class="layui-layout layui-layout-admin">
+        <div class="layui-header">
+            <div class="layui-logo">后台管理</div>
+            <!-- 头部区域（可配合layui已有的水平导航） -->
+            <ul class="layui-nav layui-layout-left">
+                <li class="layui-nav-item">
+                </li>
+            </ul>
+            <ul class="layui-nav layui-layout-right">
+                <li class="layui-nav-item">
+
+                    <a href="javascript:;">
+                        <label id="loginusername"></label>
+                    </a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="javascript:void(0);">基本资料</a></dd>
+                        <dd><a href="javascript:void(0);">安全设置</a></dd>
+                        <dd><a href="javascript:void(0);">信息提醒</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item"><a href="javascript:void(0);" id="signout">退出</a></li>
+            </ul>
+        </div>
+
+        <div class="layui-side layui-bg-black">
+            <div class="layui-side-scroll" id="navigation-tree">
+
+            </div>
+        </div>
+
+        <div class="page-content">
+            <div class="layui-tab tab" lay-filter="xbs_tab" lay-allowclose="true">
+                <ul class="layui-tab-title"></ul>
+                <ul class="rightmenu" style="position: absolute;display: none;font-size: 12px;font-family: 'Microsoft Yahei';">
+                    <li data-type="closethis">关闭当前</li>
+                    <li data-type="closeall">关闭所有</li>
+                </ul>
+                <div class="layui-tab-content">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+

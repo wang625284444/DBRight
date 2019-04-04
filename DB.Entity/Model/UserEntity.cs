@@ -7,12 +7,8 @@ namespace DB.Entity.Model
     /// <summary>
     /// 用户信息
     /// </summary>
-    public sealed class UserEntity : AssistanceEntity
+    public sealed class UserEntity : WorkflowEntity
     {
-        /// <summary>
-        /// 主键ID
-        /// </summary>
-        public Guid Id { get; set; }
         /// <summary>
         /// 用户编码
         /// </summary>

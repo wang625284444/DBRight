@@ -17,17 +17,18 @@ namespace DB.Utils.Extend
             httpContextAccessor = _httpContextAccessor;
         }
 
-        public string getRemoteIp()
+        public string GetRemoteIp()
         {
             return connectionInfo.LocalIpAddress.ToString();
         }
         /// <summary>
         /// 读取session对象
+        /// 如写入redis Key 建议登录名称 加 Entity 加 Method
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="key"></param>
         /// <returns></returns>
-        public T GetObjectAsJson<T>(string key)
+        public T GetSession<T>(string key)
         {
             return session.Get<T>(key);
         }
@@ -37,7 +38,7 @@ namespace DB.Utils.Extend
         /// <typeparam name="T"></typeparam>
         /// <param name="key"></param>
         /// <param name="value"></param>
-        public void setObjectAsJson<T>(string key, T value)
+        public void SetSession<T>(string key, T value)
         {
             session.Set(key, value);
         }
@@ -46,7 +47,7 @@ namespace DB.Utils.Extend
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="key"></param>
-        public void removeObjectAsJson(string key)
+        public void RemoveSession(string key)
         {
             session.Remove(key);
         }
