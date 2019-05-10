@@ -7,18 +7,19 @@ namespace DB.Web.Models
 {
     public class HomeModels
     {
-        //public string iconCls { get; set; } = "display:none";
-        public string text { get; set; }
-        public bool leaf { get; set; }
-        public string data { get; set; }
+        public Guid id { get; set; }
+        public string title { get; set; }
+        public string icon { get; set; } = "&#xe61c;";
+        public bool spread { get; set; } = false;
+        public string href { get; set; }
         public List<HomeChildren> children { get; set; }
     }
     public class HomeChildren
     {
-        //public string iconCls { get; set; } = "display:none";
         public Guid id { get; set; }
-        public bool leaf { get; set; }
-        public string text { get; set; }
-        public string url { get; set; }
+        public string icon { get; set; } = "&#xe61c;";
+        public bool spread { get; set; } = false;
+        public string title { get; set; }
+        public string href { get; set; }
     }
 }

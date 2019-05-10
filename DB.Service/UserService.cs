@@ -23,7 +23,7 @@ namespace DB.Service
         private HttpContextUtil _httpContextUtil { get; set; }
 
         private RedisUtil _redisUtil { get; set; }
-        
+
 
         public UsersService(IUserRepository userRepository, HttpContextUtil httpContextUtil, RedisUtil redisUtil)
         {
@@ -69,9 +69,7 @@ namespace DB.Service
                         }
                         else
                         {
-                            //创建redis头部
-                            _httpContextUtil.SetSession(KeyUtil.user_Number, usersEntity.UserNumber);
-                            //_httpContextUtil.SetSession(KeyUtil.user_info, _redisKeyUtil.user());
+                            GetSession(usersEntity);
                             //将用户信息写入redis
                             _redisUtil.SetTValue(_redisUtil.user(), usersEntity);
                             return new BaseResult<UserEntity>(usersEntity);
@@ -84,6 +82,7 @@ namespace DB.Service
                         }
                         else
                         {
+                            GetSession(usersEntity);
                             //将账号回复正常
                             return await ModifyStatus(usersEntity, StatusEnum.Normal);
                         }
@@ -95,6 +94,7 @@ namespace DB.Service
                         }
                         else
                         {
+                            GetSession(usersEntity);
                             //将账号回复正常
                             return await ModifyStatus(usersEntity, StatusEnum.Normal);
                         }
@@ -106,6 +106,7 @@ namespace DB.Service
                         }
                         else
                         {
+                            GetSession(usersEntity);
                             //将账号回复正常
                             return await ModifyStatus(usersEntity, StatusEnum.Normal);
                         }
@@ -145,19 +146,19 @@ namespace DB.Service
                             return new BaseResult<UserEntity>(userEntity);
                         case StatusEnum.Remind1:
                             //锁定一次
-                            return new BaseResult<UserEntity>("用户错误2次，错误3次锁定账号！");
+                            return new BaseResult<UserEntity>("用户错误2次，错误3次锁定账号！", false);
                         case StatusEnum.Remind2:
                             //锁定两次
-                            return new BaseResult<UserEntity>("用户错误2次，错误2次锁定账号！");
+                            return new BaseResult<UserEntity>("用户错误2次，错误2次锁定账号！", false);
                         case StatusEnum.Remind3:
                             //锁定三次
-                            return new BaseResult<UserEntity>("用户错误3次，错误1次锁定账号！");
+                            return new BaseResult<UserEntity>("用户错误3次，错误1次锁定账号！", false);
                         case StatusEnum.Locking:
                             //锁定账号
-                            return new BaseResult<UserEntity>("用户错误3次，账号锁定！");
+                            return new BaseResult<UserEntity>("用户错误3次，账号锁定！", false);
                         case StatusEnum.Disable:
                             //锁定禁用
-                            return new BaseResult<UserEntity>("当前用户已禁用！");
+                            return new BaseResult<UserEntity>("当前用户已禁用！", false);
                     }
                     //操作成功
                     return new BaseResult<UserEntity>("登陆成功！");
@@ -173,6 +174,13 @@ namespace DB.Service
                 //数据为空
                 return new BaseResult<UserEntity>("用户不存在！");
             }
+        }
+
+        public void GetSession(UserEntity userEntity)
+        {
+            _httpContextUtil.SetSession(KeyUtil.user_info, userEntity);
+            //创建redis头部
+            _httpContextUtil.SetSession(KeyUtil.user_Number, userEntity.UserNumber);
         }
 
         /// <summary>

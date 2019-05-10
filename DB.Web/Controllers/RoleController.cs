@@ -24,18 +24,7 @@ namespace DB.Web.Controllers
         {
             return View();
         }
-        /// <summary>
-        /// 根据用户ID查询角色
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public async Task<IActionResult> GetQuery()
-        {
-            var user = GetUserSession;
-            var list = await _roleModuleService.QueryById(user.Id);
-            string json = JsonNetHelper.SerializeObject(list);
-            return Json(json);
-        }
+        
         /// <summary>
         /// 查询角色
         /// </summary>

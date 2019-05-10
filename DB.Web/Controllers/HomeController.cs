@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DB.Entity.Model;
 using DB.IService;
 using DB.Utils.Common;
 using DB.Utils.Extend;
@@ -33,6 +34,13 @@ namespace DB.Web.Controllers
         {
             return View();
         }
+
+
+        /// <summary>
+        /// 查询角色权限
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
         public async Task<ActionResult> Query()
         {
             //根据用户获取角色关系
@@ -57,17 +65,16 @@ namespace DB.Web.Controllers
             foreach (var item in _listtree)
             {
                 HomeModels tree = new HomeModels();
-                tree.leaf = false;
-                tree.text = item.UrlName;
-                tree.data = "";
+                tree.title = item.UrlName;
+                tree.id = item.Id;
+                tree.href = item.Url;
                 var _listchildren = _modulelist.dataList.Where(e => e.Pid == item.Id).ToList();
                 foreach (var Listchil in _listchildren)
                 {
                     HomeChildren children = new HomeChildren();
                     children.id = Listchil.Id;
-                    children.leaf = true;
-                    children.text = Listchil.UrlName;
-                    children.url = Listchil.Url;
+                    children.title = Listchil.UrlName;
+                    children.href = Listchil.Url;
                     childrenlist.Add(children);
                 }
                 tree.children = childrenlist;
@@ -75,10 +82,25 @@ namespace DB.Web.Controllers
             }
             return JsonDateTime(treelist);
         }
+        /// <summary>
+        /// 获取用户信息
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult> QuitLanding()
+        public ActionResult LoginUser()
         {
-            _httpContextUtil.RemoveSession(KeyUtil.user_info);
+            var username = _httpContextUtil.GetSession<UserEntity>(KeyUtil.user_info);
+
+            return Json(username);
+        }
+        /// <summary>
+        /// 退出登录
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult QuitLanding()
+        {
+            _httpContextUtil.RemoveSession(KeyUtil.user_Number);
             return Json("true");
         }
     }

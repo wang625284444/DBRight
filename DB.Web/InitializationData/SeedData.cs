@@ -48,7 +48,7 @@ namespace DB.Web.InitializationData
                         WorkflowStatus = WorkflowStatus.ApprovalAndApproval
                     });
 
-                    
+
                     //角色信息
                     var role1 = context.T_Role.Add(new RoleEntity
                     {
@@ -57,7 +57,7 @@ namespace DB.Web.InitializationData
                         Pid = new Guid("00000000-0000-0000-0000-000000000000"),
                         WorkflowStatus = WorkflowStatus.ApprovalAndApproval
                     });
-                    
+
 
                     //用户管理
                     var module1 = context.T_Module.Add(new ModuleEntity
@@ -160,7 +160,7 @@ namespace DB.Web.InitializationData
                         ModuleButtionId = bit_Role2.Entity.Id
                     });
                     #endregion
-                    
+
                     #region 角色管理
                     //角色管理
                     var module3 = context.T_Module.Add(new ModuleEntity
@@ -249,7 +249,12 @@ namespace DB.Web.InitializationData
                     #region 审批管理
 
                     #endregion
-
+                    var module4 = context.T_Module.Add(new ModuleEntity
+                    {
+                        Id = Guid.NewGuid(),
+                        UrlName = "审批管理",
+                        Pid = new Guid("00000000-0000-0000-0000-000000000000"),
+                    });
 
                     //添加管理员
                     context.T_UserRole.Add(new UserRoleEntity

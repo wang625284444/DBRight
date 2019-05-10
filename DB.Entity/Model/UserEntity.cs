@@ -1,5 +1,4 @@
 ﻿using DB.Entity.Assistance;
-using System;
 using static DB.Entity.Enum.UserEnum;
 
 namespace DB.Entity.Model
