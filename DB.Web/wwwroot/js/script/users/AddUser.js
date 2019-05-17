@@ -1,8 +1,12 @@
 ﻿layui.use(['form', 'table'], function () {
     var form = layui.form,
         table = layui.table;
+
+   
     //提交
     form.on('submit(user_but)', function (obj) {
+        var s = GetQueryString("Id");
+        alert(s);
         //判断Id是否为空，如果为空执行添加操作，为空修改操作
         if (obj.field.Id === "") {
             //添加

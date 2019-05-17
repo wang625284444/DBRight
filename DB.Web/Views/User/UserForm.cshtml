@@ -10,58 +10,61 @@
 
 
 @*表单*@
-<form class="layui-form">
+<body class="childrenBody">
 
-    <label class="layui-form-label" name="Id" style="display:none;" >用户ID</label>
+    <form class="layui-form">
 
-    <!--用户账号-->
-    <div class="layui-form-item">
-        <label class="layui-form-label">用户账号：</label>
-        <div class="layui-input-inline">
-            <input type="text" name="UserAccount" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+        <label class="layui-form-label" name="Id" style="display:none;">用户ID</label>
+
+        <!--用户账号-->
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户账号：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="UserAccount" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
         </div>
-    </div>
-    <!--用户名称-->
-    <div class="layui-form-item">
-        <label class="layui-form-label">用户名称：</label>
-        <div class="layui-input-inline">
-            <input type="text" name="UserName" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+        <!--用户名称-->
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户名称：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="UserName" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
         </div>
-    </div>
-    <!--用户密码-->
-    <div class="layui-form-item">
-        <label class="layui-form-label">用户密码：</label>
-        <div class="layui-input-inline">
-            <input type="password" name="UserPassword" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+        <!--用户密码-->
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户密码：</label>
+            <div class="layui-input-inline">
+                <input type="password" name="UserPassword" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
         </div>
-    </div>
-    <!--联系方式-->
-    <div class="layui-form-item">
-        <label class="layui-form-label">手机号码：</label>
-        <div class="layui-input-inline">
-            <input type="text" name="PhoneNumber" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+        <!--联系方式-->
+        <div class="layui-form-item">
+            <label class="layui-form-label">手机号码：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="PhoneNumber" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
         </div>
-    </div>
-    <!--企业邮箱-->
-    <div class="layui-form-item">
-        <label class="layui-form-label">企业邮箱：</label>
-        <div class="layui-input-inline">
-            <input type="text" name="Email" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+        <!--企业邮箱-->
+        <div class="layui-form-item">
+            <label class="layui-form-label">企业邮箱：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="Email" lay-verify="required" placeholder="请输入" autocomplete="off" class="layui-input">
+            </div>
         </div>
-    </div>
-    <!--启用状态-->
-    <div class="layui-form-item">
-        <label class="layui-form-label">是否启用：</label>
-        <div class="layui-input-block">
-            <input type="checkbox" name="Status" checked lay-skin="switch" lay-text="启用|禁用">
+        <!--启用状态-->
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否启用：</label>
+            <div class="layui-input-block">
+                <input type="checkbox" name="Status" checked lay-skin="switch" lay-text="启用|禁用">
+            </div>
         </div>
-    </div>
-    <!--按钮-->
-    <div class="layui-form-item">
-        <div class="layui-input-block">
-            <button class="layui-btn" lay-submit lay-filter="user_but">提交</button>
-            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        <!--按钮-->
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="user_but">提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
         </div>
-    </div>
-    <!-- 更多表单结构排版请移步文档左侧【页面元素-表单】一项阅览 -->
-</form>
+        <!-- 更多表单结构排版请移步文档左侧【页面元素-表单】一项阅览 -->
+    </form>
+</body>

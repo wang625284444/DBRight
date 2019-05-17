@@ -77,7 +77,7 @@ layui.use(['table', 'layer', 'form'], function () {
 
     //监听行工具事件
     table.on('tool(table)', function (obj) {
-        var data = obj.data;
+       
         switch (obj.event) {
             case 'but_update':
                 layer.open({
@@ -88,7 +88,8 @@ layui.use(['table', 'layer', 'form'], function () {
                     maxmin: true,
                     content: './UserForm/cshtml',
                     zIndex: layer.zIndex, //重点1
-                    success: function (layero) {
+                    success: function (layero, index) {
+                        
                         layer.setTop(layero); //重点2
                     }
                 });
