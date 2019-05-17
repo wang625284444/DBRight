@@ -8,24 +8,39 @@ namespace DB.Entity.Response
     public class Pager<T> where T : class
     {
         /// <summary>
+        /// 数据状态码
+        /// </summary>
+        public int code { get; set; }
+        /// <summary>
+        /// 输出信息
+        /// </summary>
+        public string msg { get; set; }
+        /// <summary>
         /// 总数
         /// </summary>
-        public int total { get; set; }
+        public int count { get; set; }
 
         /// <summary>
         /// 返回分页的实体集合
         /// </summary>
-        public T rows { get; set; }
+        public T data { get; set; }
 
         /// <summary>
         /// 构造方法
         /// </summary>
-        /// <param name="total"></param>
-        /// <param name="rows"></param>
-        public Pager(int total, T rows)
+        /// <param name="count"></param>
+        /// <param name="data"></param>
+        public Pager(int count, T data)
         {
-            this.total = total;
-            this.rows = rows;
+            this.count = count;
+            this.data = data;
+        }
+
+        public Pager(int code, string msg, int count, T data) {
+            this.code = code;
+            this.msg = msg;
+            this.count = count;
+            this.data = data;
         }
     }
 }

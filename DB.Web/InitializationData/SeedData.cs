@@ -31,7 +31,7 @@ namespace DB.Web.InitializationData
                         UserPassword = "admin",
                         UserName = "admin",
                         PhoneNumber = "13000000000",
-                        Mail = "mail@123.cn",
+                        Email = "mail@123.cn",
                         Status = StatusEnum.Normal,
                         WorkflowStatus = WorkflowStatus.ApprovalAndApproval
                     });
@@ -43,12 +43,11 @@ namespace DB.Web.InitializationData
                         UserPassword = "admin1",
                         UserName = "admin",
                         PhoneNumber = "13000000000",
-                        Mail = "mail@123.cn",
+                        Email = "mail@123.cn",
                         Status = StatusEnum.Normal,
                         WorkflowStatus = WorkflowStatus.ApprovalAndApproval
                     });
-
-
+                    
                     //角色信息
                     var role1 = context.T_Role.Add(new RoleEntity
                     {
@@ -57,8 +56,6 @@ namespace DB.Web.InitializationData
                         Pid = new Guid("00000000-0000-0000-0000-000000000000"),
                         WorkflowStatus = WorkflowStatus.ApprovalAndApproval
                     });
-
-
                     //用户管理
                     var module1 = context.T_Module.Add(new ModuleEntity
                     {
@@ -66,7 +63,8 @@ namespace DB.Web.InitializationData
                         UrlName = "用户管理",
                         Pid = new Guid("00000000-0000-0000-0000-000000000000"),
                     });
-                    //添加模块
+                   
+                    //添加用户管理模块
                     context.T_RoleModule.Add(new RoleModuleEntity
                     {
                         Id = Guid.NewGuid(),
@@ -246,15 +244,41 @@ namespace DB.Web.InitializationData
                     });
                     #endregion
 
-                    #region 审批管理
-
-                    #endregion
+                    //审批管理
                     var module4 = context.T_Module.Add(new ModuleEntity
                     {
                         Id = Guid.NewGuid(),
                         UrlName = "审批管理",
                         Pid = new Guid("00000000-0000-0000-0000-000000000000"),
                     });
+
+                    //添加审批管理模块
+                    context.T_RoleModule.Add(new RoleModuleEntity
+                    {
+                        Id = Guid.NewGuid(),
+                        RoleId = role1.Entity.Id,
+                        ModuleId = module4.Entity.Id
+                    });
+
+                    #region 审批管理
+                    //账号管理
+                    var module5 = context.T_Module.Add(new ModuleEntity
+                    {
+                        Id = Guid.NewGuid(),
+                        UrlName = "审批管理",
+                        Url = "/User/wf",
+                        Pid = module4.Entity.Id,
+                    });
+                    //添加模块
+                    context.T_RoleModule.Add(new RoleModuleEntity
+                    {
+                        Id = Guid.NewGuid(),
+                        RoleId = role1.Entity.Id,
+                        ModuleId = module5.Entity.Id
+                    });
+                    #endregion
+
+
 
                     //添加管理员
                     context.T_UserRole.Add(new UserRoleEntity

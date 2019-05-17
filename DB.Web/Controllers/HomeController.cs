@@ -56,14 +56,14 @@ namespace DB.Web.Controllers
             //根据角色获取的权限信息查找权限
             var _modulelist = await _moduleService.QueryInId(_rolemodelList);
             Guid guid = new Guid("00000000-0000-0000-0000-000000000000");
-            //装载tree数据集合
-            List<HomeModels> treelist = new List<HomeModels>();
-            List<HomeChildren> childrenlist = new List<HomeChildren>();
             //获取集合中的父级数据
             var _listtree = _modulelist.dataList.Where(e => e.Pid == guid).ToList();
+            //装载tree数据集合
+            List<HomeModels> treelist = new List<HomeModels>();
             //将父级数据写入TreeModel模型
             foreach (var item in _listtree)
             {
+                List<HomeChildren> childrenlist = new List<HomeChildren>();
                 HomeModels tree = new HomeModels();
                 tree.title = item.UrlName;
                 tree.id = item.Id;

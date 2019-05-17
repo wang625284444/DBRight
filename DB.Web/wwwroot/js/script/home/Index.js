@@ -69,21 +69,16 @@
         addTab = function (name, url) {
             if (layui.jquery(".layui-tab-title li[lay-id='" + name + "']").length > 0) {
                 //选项卡已经存在
-                layui.element.tabChange('tabDemo', name);
-                //layer.msg('切换-' + name);
+                layui.element.tabChange('tab', name);
             } else {
-                //动态控制iframe高度
-                var tabheight = layui.jquery(window).height() - 80;
-                contentTxt = '<iframe src="' + url + '" scrolling="no" width="100%" height="' + tabheight + 'PX"></iframe>';
                 //新增一个Tab项
-                layui.element.tabAdd('tabDemo', {
+                layui.element.tabAdd('tab', {
                     title: name,
-                    content: contentTxt,
+                    content: '<iframe border="0" scrolling="auto" frameborder="0" width="100%" height="85%" src="' + url + '" ></iframe>',
                     id: name
                 });
                 //切换刷新
-                layui.element.tabChange('tabDemo', name);
-                //layer.msg('新增-' + name);
+                layui.element.tabChange('tab', name);
             }
         };
     });
