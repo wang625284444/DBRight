@@ -24,7 +24,7 @@ namespace DB.Web.Controllers
         {
             return View();
         }
-        
+
         /// <summary>
         /// 查询角色
         /// </summary>
@@ -59,9 +59,9 @@ namespace DB.Web.Controllers
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public async Task<IActionResult> DelRoleId(string obj)
+        public async Task<IActionResult> DelRoleId(Guid guid)
         {
-            return Json(await _roleService.DelRoleId(obj));
+            return Json(await _roleService.DelRoleId(guid));
         }
     }
 }

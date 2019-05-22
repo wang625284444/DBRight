@@ -1,13 +1,10 @@
-﻿layui.use(['form', 'table'], function () {
+﻿layui.use(['form', 'layer'], function () {
     var form = layui.form,
-        table = layui.table;
+        layer = layui.layer;
 
-   
     //提交
     form.on('submit(user_but)', function (obj) {
-        var s = GetQueryString("Id");
-        alert(s);
-        //判断Id是否为空，如果为空执行添加操作，为空修改操作
+        var status = status === "on" ? "Normal" : "Disable";
         if (obj.field.Id === "") {
             //添加
             $.ajax({
@@ -20,12 +17,13 @@
                     UserPassword: obj.field.UserPassword,
                     PhoneNumber: obj.field.PhoneNumber,
                     Email: obj.field.Email,
-                    Status: obj.field.Status
+                    Status: status
                 },
                 success: function (data) {
-                    //layer.alert('添加成功！');
+                    layer.alert('添加成功！');
                     //table.reload('table');
-                    form.layer.close(layer.index);
+                    layer.closeAll();
+                    //form.layer.close(layer.index);
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     alert(errorThrown);
@@ -34,7 +32,7 @@
         } else {
             //修改
             $.ajax({
-                type: 'POST',
+                type: 'PUT',
                 url: '/User/ModifyUser',
                 dataType: "json",
                 data: {
@@ -44,10 +42,11 @@
                     UserPassword: obj.field.UserPassword,
                     PhoneNumber: obj.field.PhoneNumber,
                     Email: obj.field.Email,
-                    Status: obj.field.Status
+                    WorkflowStatus: obj.field.WorkflowStatus,
+                    Status: status
                 },
                 success: function (data) {
-                    //layer.alert('添加成功！');
+                    layer.alert('修改成功！');
                     //table.reload('table');
                     form.layer.close(layer.index);
                 },
@@ -56,7 +55,20 @@
                 }
             });
         }
+    });
+    //初始化
+    form.on('submit(reset_but)', function (obj) {
+        if (obj.field.Id === "") {
+            $("input[name='Id']").val("");
+            $("input[name='UserAccount']").val("");
+            $("input[name='UserName']").val("");
+            $("input[name='UserPassword']").val("");
+            $("input[name='PhoneNumber']").val("");
+            $("input[name='Email']").val("");
+            $("input[name='Status']").val("");
+        } else {
+            //修改
 
-        return false;
+        }
     });
 });

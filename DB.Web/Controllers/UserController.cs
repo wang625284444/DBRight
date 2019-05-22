@@ -44,6 +44,7 @@ namespace DB.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> AddUser(UserEntity userEntity)
         {
+           
             userEntity.Id = Guid.NewGuid();
             userEntity.UserNumber = "YH" + DateTime.Now.ToString("yyyyMMddss");
             return Json(await _usersService.AddUser(userEntity));

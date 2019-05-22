@@ -17,6 +17,14 @@ namespace DB.Service
         {
             this._moduleButtionRepository = moduleButtionRepository;
         }
+
+        public async Task<BaseResult<IQueryable<ModuleButtionEntity>>> QueryAllList()
+        {
+            Expression<Func<ModuleButtionEntity, bool>> where = LinqUtil.True<ModuleButtionEntity>();
+            IQueryable<ModuleButtionEntity> _moduleButtionEntity = await _moduleButtionRepository.GetAllAsync(where);
+            return new BaseResult<IQueryable<ModuleButtionEntity>>(_moduleButtionEntity.AsQueryable());
+        }
+
         /// <summary>
         /// 根据模块获取按钮
         /// </summary>

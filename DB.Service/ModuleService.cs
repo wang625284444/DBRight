@@ -38,18 +38,22 @@ namespace DB.Service
         /// <summary>
         /// 根据角色信息查询模块
         /// </summary>
-        /// <param name="guids">模块ID集合</param>
+        /// <param name="moduleId"></param>
         /// <returns></returns>
-        public async Task<BaseResult<ModuleEntity>> QueryInId(Guid[] moduleId)
+        public async Task<BaseResult<ModuleEntity>> QueryInId(Guid[] moduleId, Guid guid)
         {
-            Expression<Func<ModuleEntity, bool>> where = LinqUtil.True<ModuleEntity>();
-            where = where.AndAlso(e => moduleId.Contains(e.Id));
-            var _modulelist = await _moduleRepository.GetListAllAsync(where);
-            if (_modulelist != null)
+            var modulelist = _redisUtil.GetListValue<ModuleEntity>(_redisUtil.Module(guid));
+            if (modulelist == null)
             {
-                _redisUtil.SetListValue(_redisUtil.module(), _modulelist);
+                Expression<Func<ModuleEntity, bool>> where = LinqUtil.True<ModuleEntity>();
+                where = where.AndAlso(e => moduleId.Contains(e.Id));
+                modulelist = await _moduleRepository.GetListAllAsync(where);
+                if (modulelist != null)
+                {
+                    _redisUtil.SetListValue(_redisUtil.Module(guid), modulelist);
+                }
             }
-            return new BaseResult<ModuleEntity>("根据用户查询模块", _modulelist);
+            return new BaseResult<ModuleEntity>("根据用户查询模块", modulelist);
         }
     }
 }

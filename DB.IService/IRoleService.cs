@@ -52,6 +52,6 @@ namespace DB.IService
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        Task<BaseResult<bool>> DelRoleId(string obj);
+        Task<BaseResult<bool>> DelRoleId(Guid guid);
     }
 }

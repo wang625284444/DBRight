@@ -16,8 +16,9 @@ namespace DB.IService
         /// <summary>
         /// 根据角色信息查询模块
         /// </summary>
-        /// <param name="guids">模块ID集合</param>
+        /// <param name="moduleId"></param>
+        /// <param name="guid"></param>
         /// <returns></returns>
-        Task<BaseResult<ModuleEntity>> QueryInId(Guid[] moduleId);
+        Task<BaseResult<ModuleEntity>> QueryInId(Guid[] moduleId,Guid guid);
     }
 }

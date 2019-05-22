@@ -2,6 +2,7 @@
 using DB.Utils.Extend;
 using Microsoft.Extensions.Configuration;
 using StackExchange.Redis;
+using System;
 using System.Collections.Generic;
 
 namespace DB.Utils.Redis
@@ -41,9 +42,16 @@ namespace DB.Utils.Redis
         /// <typeparam name="T"></typeparam>
         /// <param name="key"></param>
         /// <returns></returns>
-        public List<T> GetListValue<T>(string key)
+        public List<T> GetListValue<T>(string key) where T : class
         {
-            return JsonNetHelper.DeserializeObject<List<T>>(db.StringGet(key));
+            if (db.StringGet(key).IsNull == true)
+            {
+                return null;
+            }
+            else
+            {
+                return JsonNetHelper.DeserializeObject<List<T>>(db.StringGet(key));
+            }
         }
 
         /// <summary>
@@ -64,9 +72,16 @@ namespace DB.Utils.Redis
         /// <typeparam name="T"></typeparam>
         /// <param name="key"></param>
         /// <returns></returns>
-        public T GetTVlues<T>(string key)
+        public T GetTVlues<T>(string key) where T : class
         {
-            return JsonNetHelper.DeserializeObject<T>(db.StringGet(key));
+            if (db.StringGet(key).IsNull == true)
+            {
+                return null;
+            }
+            else
+            {
+                return JsonNetHelper.DeserializeObject<T>(db.StringGet(key));
+            }
         }
 
         /// <summary>
@@ -102,45 +117,32 @@ namespace DB.Utils.Redis
 
 
 
-
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        private string GetSessionUserNumber()
+        public string UserRole(Guid guid)
         {
-            return _httpContextUtil.GetSession<string>(KeyUtil.user_Number);
+            return "UserRole-" + guid.ToString();
         }
 
-        /// <summary>
-        /// Redis存放用户信息Key
-        /// </summary>
-        public string user()
-        {
-            return GetSessionUserNumber() + "aaad8f69-627e-4ede-b985-e40bdd2b78bc";
-        }
+
         /// <summary>
         /// Redis存放角色信息Key
         /// </summary>
-        public string role()
+        public string Role(Guid guid)
         {
-            return GetSessionUserNumber() + "7df2304e-e162-4df5-b834-97aacca022eb";
+            return "Role-" + guid.ToString();
         }
         /// <summary>
         /// Redis存放按钮关系信息Key
         /// </summary>
-        public string rolebuttion()
+        public string RoleButtion(Guid guid)
         {
-            return GetSessionUserNumber() + "f356393d-294b-43e4-a640-afd681a552c2";
+            return "RoleButtion-" + guid.ToString();
         }
         /// <summary>
         /// Redis存放模块信息Kye
         /// </summary>
-        public string module()
+        public string Module(Guid guid)
         {
-            return GetSessionUserNumber() + "4c7f1c06-224d-4799-b49f-61a816986cff";
+            return "Module-" + guid;
         }
     }
 }

@@ -70,8 +70,6 @@ namespace DB.Service
                         else
                         {
                             GetSession(usersEntity);
-                            //将用户信息写入redis
-                            _redisUtil.SetTValue(_redisUtil.user(), usersEntity);
                             return new BaseResult<UserEntity>(usersEntity);
                         }
                     case StatusEnum.Remind1:
@@ -178,9 +176,10 @@ namespace DB.Service
 
         public void GetSession(UserEntity userEntity)
         {
+            //写入session
             _httpContextUtil.SetSession(KeyUtil.user_info, userEntity);
             //创建redis头部
-            _httpContextUtil.SetSession(KeyUtil.user_Number, userEntity.UserNumber);
+            //_httpContextUtil.SetSession(KeyUtil.user_Number, userEntity.UserNumber);
         }
 
         /// <summary>
@@ -262,7 +261,7 @@ namespace DB.Service
         public async Task<BaseResult<bool>> ModifyUser(UserEntity userEntity)
         {
             //判断当前数据是否在审核状态，审核中不可修改
-            if (userEntity.WorkflowStatus != WorkflowStatus.ApprovalToBeAudited)
+            if (userEntity.WorkflowStatus == WorkflowStatus.ApprovalToBeAudited)
             {
                 return new BaseResult<bool>("当前数据审核中不可修改！");
             }

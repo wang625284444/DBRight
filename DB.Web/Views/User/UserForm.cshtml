@@ -10,12 +10,11 @@
 
 
 @*表单*@
-<body class="childrenBody">
+<body id="boby">
 
     <form class="layui-form">
-
-        <label class="layui-form-label" name="Id" style="display:none;">用户ID</label>
-
+        <input type="text" name="Id" class="layui-input" style="display:none;">
+        <input type="text" name="WorkflowStatus" class="layui-input" style="display:none" />
         <!--用户账号-->
         <div class="layui-form-item">
             <label class="layui-form-label">用户账号：</label>
@@ -62,7 +61,7 @@
         <div class="layui-form-item">
             <div class="layui-input-block">
                 <button class="layui-btn" lay-submit lay-filter="user_but">提交</button>
-                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                <button class="layui-btn layui-btn-primary" lay-submit lay-filter="reset_but">重置</button>
             </div>
         </div>
         <!-- 更多表单结构排版请移步文档左侧【页面元素-表单】一项阅览 -->

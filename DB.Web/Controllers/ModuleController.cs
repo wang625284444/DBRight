@@ -62,15 +62,15 @@ namespace DB.Web.Controllers
             return JsonDateTime(treelist);
         }
 
-        /// <summary>
-        /// 根据角色Id获取用户模块
-        /// </summary>
-        /// <param name="guids"></param>
-        /// <returns></returns>
-        public async Task<ActionResult> QueryInId(Guid guid)
-        {
-            var _roleModul = await _roleModuleService.QueryById(guid);
-            return JsonDateTime(await _moduleService.QueryInId(_roleModul.data.Select(x => x.ModuleId).ToArray()));
-        }
+        ///// <summary>
+        ///// 根据角色Id获取用户模块
+        ///// </summary>
+        ///// <param name="guids"></param>
+        ///// <returns></returns>
+        //public async Task<ActionResult> QueryInId(Guid guid)
+        //{
+        //    var _roleModul = await _roleModuleService.QueryByRoleId(guid);
+        //    return JsonDateTime(await _moduleService.QueryInId(_roleModul.data.Select(x => x.ModuleId).ToArray()));
+        //}
     }
 }

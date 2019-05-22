@@ -35,11 +35,13 @@ namespace DB.Service
         }
 
         /// <summary>
-        /// 查询角色信息
+        /// 查询模块关联信息
         /// </summary>
-        /// <returns>BaseResult</returns>
-        public async Task<BaseResult<IQueryable<RoleModuleEntity>>> QueryById(Guid guid)
+        /// <param name="guid"></param>
+        /// <returns></returns>
+        public async Task<BaseResult<IQueryable<RoleModuleEntity>>> QueryByRoleId(Guid guid)
         {
+
             Expression<Func<RoleModuleEntity, bool>> where = LinqUtil.True<RoleModuleEntity>();
             where = where.AndAlso(e => e.RoleId == guid && e.IsStatus == true);
             IQueryable<RoleModuleEntity> _roleModulelist = await _roleModuleRepository.GetAllAsync(where);

@@ -1,7 +1,8 @@
 ﻿
 layui.use(['table', 'layer', 'form'], function () {
     var table = layui.table,
-        layer = layui.layer;
+        layer = layui.layer,
+        form = layui.form;
 
     table.render({
         elem: '#table',
@@ -33,6 +34,7 @@ layui.use(['table', 'layer', 'form'], function () {
 
     //头工具栏事件
     table.on('toolbar(table)', function (obj) {
+
         switch (obj.event) {
             case 'but_query':
                 //查询
@@ -61,11 +63,12 @@ layui.use(['table', 'layer', 'form'], function () {
                     maxmin: true,
                     content: './UserForm/cshtml',
                     zIndex: layer.zIndex, //重点1
-                    success: function (layero) {
+                    success: function (layero, index) {
+                        var body = layui.layer.getChildFrame('body', index); //获取页面body
+                        body.find("#Id").val("");
                         layer.setTop(layero); //重点2
                     }
                 });
-
                 break;
             case 'but_SeeRole':
                 //弹出查看角色模块
@@ -77,7 +80,6 @@ layui.use(['table', 'layer', 'form'], function () {
 
     //监听行工具事件
     table.on('tool(table)', function (obj) {
-       
         switch (obj.event) {
             case 'but_update':
                 layer.open({
@@ -89,14 +91,25 @@ layui.use(['table', 'layer', 'form'], function () {
                     content: './UserForm/cshtml',
                     zIndex: layer.zIndex, //重点1
                     success: function (layero, index) {
-                        
+                        var body = layui.layer.getChildFrame('body', index); //获取页面body
+                        //绑定参数
+                        body.find("input[name='Id']").val(obj.data.id);
+                        body.find("input[name='UserAccount']").val(obj.data.userAccount);
+                        body.find("input[name='UserName']").val(obj.data.userName);
+                        body.find("input[name='UserPassword']").val(obj.data.userPassword);
+                        body.find("input[name='PhoneNumber']").val(obj.data.phoneNumber);
+                        body.find("input[name='Email']").val(obj.data.email);
+                        body.find("input[name='Status']").val(obj.data.status);
+                        body.find("input[name='WorkflowStatus']").val(obj.data.workflowStatus);
+                        form.render(); // 更新渲染
                         layer.setTop(layero); //重点2
+
                     }
                 });
                 break;
             case 'but_delete':
                 //删除
-                layer.confirm('真的删除行么', function (index) {
+                layer.confirm('是否删除？', function (index) {
                     $.ajax({
                         type: 'DELETE',
                         url: '/User/DelUserId',
@@ -116,20 +129,4 @@ layui.use(['table', 'layer', 'form'], function () {
                 break;
         }
     });
-
-    //带参查询
-    function query() {
-        $.ajax({
-            type: 'GET',
-            url: '/User/QueryUser',
-            data: { obj: obj.data.id },
-            dataType: "json",
-            success: function (data) {
-                layer.alert('删除成功！');
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                alert(errorThrown);
-            }
-        });
-    }
 });
