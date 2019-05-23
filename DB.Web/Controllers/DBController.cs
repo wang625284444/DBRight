@@ -43,7 +43,7 @@ namespace DB.Web.Controllers
             if (isDefined) return;
             byte[] result;
             //获取session
-            filterContext.HttpContext.Session.TryGetValue(KeyUtil.user_info, out result);
+            filterContext.HttpContext.Session.TryGetValue(KeyUtil.user_Number, out result);
             //判断session是否存在
             if (result == null)
             {
