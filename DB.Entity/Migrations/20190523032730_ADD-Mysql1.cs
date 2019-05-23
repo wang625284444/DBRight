@@ -60,8 +60,8 @@ namespace DB.Entity.Migrations
                     UserPassword = table.Column<string>(nullable: true),
                     UserName = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
-                    Mail = table.Column<string>(nullable: true),
-                    Status = table.Column<int>(nullable: false)
+                    Email = table.Column<string>(nullable: true),
+                    Status = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {

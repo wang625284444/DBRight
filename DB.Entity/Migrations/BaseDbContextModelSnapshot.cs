@@ -164,7 +164,7 @@ namespace DB.Entity.Migrations
 
                     b.Property<string>("PhoneNumber");
 
-                    b.Property<int>("Status");
+                    b.Property<int?>("Status");
 
                     b.Property<DateTime>("UpdateTime");
 
