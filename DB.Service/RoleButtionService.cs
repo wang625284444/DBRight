@@ -30,19 +30,38 @@ namespace DB.Service
         /// 根据session角色获取按钮关系
         /// </summary>
         /// <returns>BaseResult</returns>
-        public async Task<BaseResult<List<RoleButtionEntity>>> QueryByRoleID()
+        public async Task<BaseResult<List<RoleButtionEntity>>> QueryByRoleListID(Guid guid, List<ModuleButtionEntity> moduleButtionList)
         {
             //读取Redis角色信息
-            var roleEntity = _redisUtil.GetTVlues<RoleEntity>(_redisUtil.role());
-            Expression<Func<RoleButtionEntity, bool>> where = LinqUtil.True<RoleButtionEntity>();
-            where = where.AndAlso(e => e.RoleId == roleEntity.Id);
-            IQueryable<RoleButtionEntity> list = await _roleButtionRepository.GetAllAsync(where);
-            if (list != null)
+            var roleButtionlist = _redisUtil.GetTVlues<List<RoleButtionEntity>>(_redisUtil.RoleButtion(guid));
+            if (roleButtionlist == null)
             {
-                //将用户按钮写入redis
-                _redisUtil.SetListValue(_redisUtil.rolebuttion(), list.ToList());
+                Expression<Func<RoleButtionEntity, bool>> where = LinqUtil.True<RoleButtionEntity>();
+                where = where.AndAlso(e => e.RoleId == guid);
+                IQueryable<RoleButtionEntity> list = await _roleButtionRepository.GetAllAsync(where);
+                if (list != null)
+                {
+                    roleButtionlist = new List<RoleButtionEntity>();
+                    //组装按钮集合
+                    foreach (var item in list.ToList())
+                    {
+                        foreach (var modulebuttion in moduleButtionList)
+                        {
+                            if (item.ModuleButtionId == modulebuttion.Id)
+                            {
+                                item.ModuleButtion = modulebuttion;
+                            }
+                        }
+                        roleButtionlist.Add(item);
+                    }
+                    //将用户按钮关系写入redis
+                    _redisUtil.SetListValue(_redisUtil.RoleButtion(guid), roleButtionlist);
+                    //redis空集合获取查询出来的结果
+
+                }
             }
-            return new BaseResult<List<RoleButtionEntity>>(list.ToList());
+
+            return new BaseResult<List<RoleButtionEntity>>(roleButtionlist);
         }
         /// <summary>
         /// 根据角色获取权限按钮

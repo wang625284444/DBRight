@@ -12,10 +12,11 @@ namespace DB.IService
         [Obsolete("方法不再使用")]
         Task<BaseResult<IQueryable<RoleModuleEntity>>> QueryAll();
         /// <summary>
-        /// 根据用户ID查询角色
+        /// 查询模块关联信息
         /// </summary>
+        /// <param name="guid">角色ID</param>
         /// <returns></returns>
-        Task<BaseResult<IQueryable<RoleModuleEntity>>> QueryById(Guid guid);
+        Task<BaseResult<IQueryable<RoleModuleEntity>>> QueryByRoleId(Guid guid);
 
         /// <summary>
         /// 添加角色权限

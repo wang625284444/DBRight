@@ -10,10 +10,10 @@ namespace DB.IService
     public interface IRoleButtionService
     {
         /// <summary>
-        /// 根据session角色获取按钮关系
+        /// 根据角色获取按钮关系
         /// </summary>
         /// <returns>BaseResult</returns>
-        Task<BaseResult<List<RoleButtionEntity>>> QueryByRoleID();
+        Task<BaseResult<List<RoleButtionEntity>>> QueryByRoleListID(Guid guid,List<ModuleButtionEntity> moduleButtionList);
         /// <summary>
         /// 根据角色获取权限按钮
         /// </summary>

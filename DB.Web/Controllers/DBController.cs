@@ -101,5 +101,15 @@ namespace DB.Web.Controllers
             var timeConverter = new IsoDateTimeConverter { DateTimeFormat = "yyyy-MM-dd HH:mm:ss" };
             return Content(JsonConvert.SerializeObject(result, Formatting.Indented, timeConverter));
         }
+
+        /// <summary>
+        /// 重构方法json
+        /// </summary>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        public ContentResult JsonData(object result)
+        {
+            return Content(JsonConvert.SerializeObject(result, Formatting.Indented));
+        }
     }
 }

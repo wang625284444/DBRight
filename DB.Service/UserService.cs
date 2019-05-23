@@ -70,8 +70,6 @@ namespace DB.Service
                         else
                         {
                             GetSession(usersEntity);
-                            //将用户信息写入redis
-                            _redisUtil.SetTValue(_redisUtil.user(), usersEntity);
                             return new BaseResult<UserEntity>(usersEntity);
                         }
                     case StatusEnum.Remind1:
@@ -178,9 +176,10 @@ namespace DB.Service
 
         public void GetSession(UserEntity userEntity)
         {
+            //写入session
             _httpContextUtil.SetSession(KeyUtil.user_info, userEntity);
             //创建redis头部
-            _httpContextUtil.SetSession(KeyUtil.user_Number, userEntity.UserNumber);
+            //_httpContextUtil.SetSession(KeyUtil.user_Number, userEntity.UserNumber);
         }
 
         /// <summary>
@@ -202,9 +201,9 @@ namespace DB.Service
             {
                 where = where.AndAlso(e => e.UserName == userEntity.UserName);
             }
-            if (userEntity.UserAccount != null)
+            if (userEntity.Status != null)
             {
-                where = where.AndAlso(e => e.UserAccount == userEntity.UserAccount);
+                where = where.AndAlso(e => e.Status == userEntity.Status);
             }
             if (userEntity.WorkflowStatus != null)
             {
@@ -213,7 +212,7 @@ namespace DB.Service
 
             var total = await _userRepository.CountAsync(where);
             IQueryable<UserEntity> list = await _userRepository.GetPageAllAsync<UserEntity, DateTime, UserEntity>(pageIndex, pageSize, where, c => c.CreationTime, null);
-            return new Pager<IQueryable<UserEntity>>(total, list.AsQueryable());
+            return new Pager<IQueryable<UserEntity>>(0,"用户信息查询成功",total, list.AsQueryable());
         }
 
         /// <summary>
@@ -262,7 +261,7 @@ namespace DB.Service
         public async Task<BaseResult<bool>> ModifyUser(UserEntity userEntity)
         {
             //判断当前数据是否在审核状态，审核中不可修改
-            if (userEntity.WorkflowStatus != WorkflowStatus.ApprovalToBeAudited)
+            if (userEntity.WorkflowStatus == WorkflowStatus.ApprovalToBeAudited)
             {
                 return new BaseResult<bool>("当前数据审核中不可修改！");
             }
@@ -273,7 +272,7 @@ namespace DB.Service
             _userentity.UserName = userEntity.UserName;
             _userentity.UserPassword = userEntity.UserPassword;
             _userentity.PhoneNumber = userEntity.PhoneNumber;
-            _userentity.Mail = userEntity.Mail;
+            _userentity.Email = userEntity.Email;
             //判断返回内容
             if (await _userRepository.UpdateAsync(_userentity))
             {
@@ -290,13 +289,16 @@ namespace DB.Service
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public async Task<BaseResult<bool>> DelUserId(string obj)
+        public async Task<BaseResult<bool>> DelUserId(Guid obj)
         {
-            List<UserEntity> userListEntity = JsonNetHelper.DeserializeObject<List<UserEntity>>(obj);
-            var ser = userListEntity.Where(e => e.Id == _httpContextUtil.GetSession<UserEntity>(KeyUtil.user_info).Id);
-            if (ser.Count() == 0)
+            //List<UserEntity> userListEntity = JsonNetHelper.DeserializeObject<List<UserEntity>>(obj);
+            UserEntity userListEntity = new UserEntity();
+            userListEntity.Id = obj;
+            //var ser = userListEntity.Where(e => e.Id == _httpContextUtil.GetSession<UserEntity>(KeyUtil.user_info).Id);
+            var ser = _httpContextUtil.GetSession<UserEntity>(KeyUtil.user_info).Id;
+            if (ser != obj)
             {
-                var total = await _userRepository.DeleteListAsync(userListEntity);
+                var total = await _userRepository.DeleteAsync(userListEntity);
                 if (total)
                 {
                     return new BaseResult<bool>("删除用户成功！");

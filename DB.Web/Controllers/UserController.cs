@@ -18,6 +18,11 @@ namespace DB.Web.Controllers
         {
             return View();
         }
+
+        public IActionResult UserForm()
+        {
+            return View();
+        }
         /// <summary>
         /// 查询用户信息
         /// </summary>
@@ -25,11 +30,10 @@ namespace DB.Web.Controllers
         /// <param name="pageIndex"></param>
         /// <param name="pageSize"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpGet]
         public async Task<ActionResult> QueryUser(UserEntity userEntity, int page, int limit)
         {
-            var userList = await _usersService.QueryUser(userEntity, page, limit);
-            return Json(userList);
+            return Json(await _usersService.QueryUser(userEntity, page, limit));
         }
 
         /// <summary>
@@ -37,8 +41,10 @@ namespace DB.Web.Controllers
         /// </summary>
         /// <param name="userEntity"></param>
         /// <returns></returns>
+        [HttpPost]
         public async Task<ActionResult> AddUser(UserEntity userEntity)
         {
+           
             userEntity.Id = Guid.NewGuid();
             userEntity.UserNumber = "YH" + DateTime.Now.ToString("yyyyMMddss");
             return Json(await _usersService.AddUser(userEntity));
@@ -48,6 +54,7 @@ namespace DB.Web.Controllers
         /// </summary>
         /// <param name="userEntity"></param>
         /// <returns></returns>
+        [HttpPut]
         public async Task<ActionResult> ModifyUser(UserEntity userEntity)
         {
             return Json(await _usersService.ModifyUser(userEntity));
@@ -57,7 +64,8 @@ namespace DB.Web.Controllers
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public async Task<ActionResult> DelUserId(string obj)
+        [HttpDelete]
+        public async Task<ActionResult> DelUserId(Guid obj)
         {
             return Json(await _usersService.DelUserId(obj));
         }

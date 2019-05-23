@@ -11,6 +11,11 @@ namespace DB.IService
     public interface IModuleButtionService
     {
         /// <summary>
+        /// 获取全部按钮
+        /// </summary>
+        /// <returns></returns>
+        Task<BaseResult<IQueryable<ModuleButtionEntity>>> QueryAllList();
+        /// <summary>
         /// 根据模块获取按钮
         /// </summary>
         /// <param name="moduleId"></param>

@@ -1,5 +1,4 @@
 ﻿using DB.Entity.Assistance;
-using System;
 using static DB.Entity.Enum.UserEnum;
 
 namespace DB.Entity.Model
@@ -32,11 +31,11 @@ namespace DB.Entity.Model
         /// <summary>
         /// 邮箱
         /// </summary>
-        public string Mail { get; set; }
+        public string Email { get; set; }
         /// <summary>
         /// 用户状态
         /// </summary>
-        public StatusEnum Status { get; set; }
+        public StatusEnum? Status { get; set; }
 
     }
 }

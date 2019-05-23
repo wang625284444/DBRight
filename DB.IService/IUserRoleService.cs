@@ -8,9 +8,8 @@ namespace DB.IService
     public interface IUserRoleService
     {
         /// <summary>
-        /// 根据登陆用户查询角色
+        /// 根据用户获取角色关系
         /// </summary>
-        /// <param name="guid">用户ID</param>
         /// <returns></returns>
         Task<BaseResult<UserRoleEntity>> userRoleSessionById();
     }

@@ -1,12 +1,63 @@
 ﻿
 @{
-    ViewData["Title"] = "账号管理";
+    ViewData["Title"] = "角色管理";
 }
-<link href="~/ext/build/theme-neptune/resources/theme-neptune-all.css" rel="stylesheet" />
-<link href="~/ext/css/KitchenSink-all.css" rel="stylesheet" />
-<link href="~/css/home/Index.css" rel="stylesheet" />
-<script src="~/ext/build/ext-all.js"></script>
-<script src="~/js/script/work/workEstablish.js"></script>
-<script src="~/js/script/users/Index.js"></script>
-<script src="~/ext/build/locale-zh_CN.js"></script>
-<div id="grid"></div>
+<link rel="stylesheet" href="~/layui/css/layui.css">
+<script type="text/javascript" src="~/js/jquery.js"></script>
+<script type="text/javascript" src="~/layui/layui.js"></script>
+<script type="text/javascript" src="~/js/script/users/Index.js"></script>
+<script type="text/javascript" src="~/js/script/users/AddUser.js"></script>
+
+@*table表格*@
+<table class="layui-hide" id="table" lay-filter="table"></table>
+
+
+@*头部按钮*@
+<script type="text/html" id="toolbar">
+    用户编码：
+    <div class="layui-inline">
+        <input class="layui-input" style="width:120px; height:30px" id="userNumber" autocomplete="off">
+    </div>
+    用户账号：
+    <div class="layui-inline">
+        <input class="layui-input" style="width:120px; height:30px" id="userAccount" autocomplete="off">
+    </div>
+    数据状态：
+    <div class="layui-inline">
+        <div style="width:120px; height:40px;">
+            <select id="status">
+                <option value="" selected="">查看全部</option>
+                <option value="0">启用</option>
+                <option value="5">锁定</option>
+            </select>
+        </div>
+    </div>
+    审核状态：
+    <div class="layui-inline">
+        <div style="width:120px; height:40px">
+            <select id="workflowStatus">
+                <option value="" selected="">查看全部</option>
+                <option value="0">未提交</option>
+                <option value="100">待审核</option>
+                <option value="200">审核通过</option>
+                <option value="300">审核拒绝</option>
+            </select>
+        </div>
+    </div>
+
+    <button class="layui-btn layui-btn-sm" data-type="reload" lay-event="but_query">搜索</button>
+    <hr />
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" data-method="setTop" id="but_add" lay-event="but_add">添加角色</button>
+        <button class="layui-btn layui-btn-sm" id="but_SeeRole" lay-event="but_SeeRole">查看账号层级</button>
+    </div>
+</script>
+@*数据操作按钮*@
+<script type="text/html" id="bar">
+    <a class="layui-btn layui-btn-xs" id="but_update" lay-event="but_update">修改</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" id="but_delete" lay-event="but_delete">删除</a>
+    <a class="layui-btn layui-btn-xs" id="but_AddModuleRole" lay-event="but_AddModuleRole">添加角色</a>
+</script>
+
+
+

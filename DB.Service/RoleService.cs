@@ -71,17 +71,25 @@ namespace DB.Service
         /// <summary>
         /// 根据用户Id查询当前角色
         /// </summary>
-        /// <param name="guid"></param>
+        /// <param name="guid">角色ID</param>
         /// <returns></returns>
         public async Task<BaseResult<RoleEntity>> QueryById(Guid guid)
         {
-            Expression<Func<RoleEntity, bool>> where = LinqUtil.True<RoleEntity>();
-            where = where.AndAlso(e => e.IsStatus == false || e.Id == guid);
-            var rolelist = await _roleRepository.GetAsync(where);
-            if (rolelist != null)
+            //redis获取角色信息
+            var rolelist = _redisUtil.GetTVlues<RoleEntity>(_redisUtil.Role(guid));
+            //判断角色在redis是否存在
+            if (rolelist == null)
             {
-                _redisUtil.SetTValue(_redisUtil.role(), rolelist);
+                Expression<Func<RoleEntity, bool>> where = LinqUtil.True<RoleEntity>();
+                where = where.AndAlso(e => e.IsStatus == false || e.Id == guid);
+                rolelist = await _roleRepository.GetAsync(where);
+                if (rolelist != null)
+                {
+                    //写入redis
+                    _redisUtil.SetTValue(_redisUtil.Role(guid), rolelist);
+                }
             }
+
             return new BaseResult<RoleEntity>(rolelist);
         }
 
@@ -118,13 +126,12 @@ namespace DB.Service
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public async Task<BaseResult<bool>> DelRoleId(string obj)
+        public async Task<BaseResult<bool>> DelRoleId(Guid guid)
         {
-            List<RoleEntity> roleListEntity = JsonNetHelper.DeserializeObject<List<RoleEntity>>(obj);
-            var ser = roleListEntity.Where(e => e.Id == _redisUtil.GetTVlues<RoleEntity>(_redisUtil.role()).Id);
-            if (ser.Count() == 0)
+            var roleListEntity = _redisUtil.GetTVlues<RoleEntity>(_redisUtil.Role(guid));
+            if (roleListEntity == null)
             {
-                var total = await _roleRepository.DeleteListAsync(roleListEntity);
+                var total = await _roleRepository.DeleteAsync(roleListEntity);
                 if (total)
                 {
                     return new BaseResult<bool>("删除用户成功！");

@@ -56,7 +56,7 @@ namespace DB.IService
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        Task<BaseResult<bool>> DelUserId(string obj);
+        Task<BaseResult<bool>> DelUserId(Guid obj);
         /// <summary>
         /// 更改用户状态
         /// </summary>
