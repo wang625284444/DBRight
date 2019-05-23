@@ -25,15 +25,15 @@ namespace DB.Web.Controllers
         /// </summary>
         /// <param name="guid">角色ID</param>
         /// <returns></returns>
+        [HttpGet]
         public async Task<IActionResult> QueryByRoleID(Guid guid)
         {
             var list = await _roleButtionService.QueryByRoleID(guid);
             return JsonDateTime(list.data.Select(x => new { x.ModuleButtionId }));
         }
-
-        public async Task<IActionResult> QuertUserIdButtion()
+        public ActionResult QueryByRoleList(Guid guid)
         {
-            return Json("");
+            return JsonDateTime(_roleButtionService.QueryByRoleList(guid));
         }
     }
 }

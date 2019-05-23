@@ -14,6 +14,12 @@ namespace DB.IService
         /// </summary>
         /// <returns>BaseResult</returns>
         Task<BaseResult<List<RoleButtionEntity>>> QueryByRoleListID(Guid guid,List<ModuleButtionEntity> moduleButtionList);
+
+        /// <summary>
+        /// 通过session获取当前页面拥有那些按钮权限
+        /// </summary>
+        /// <returns></returns>
+        BaseResult<List<RoleButtionEntity>> QueryByRoleList(Guid guid);
         /// <summary>
         /// 根据角色获取权限按钮
         /// </summary>

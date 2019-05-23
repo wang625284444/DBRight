@@ -37,7 +37,6 @@ layui.use(['table', 'layer', 'form'], function () {
 
         switch (obj.event) {
             case 'but_query':
-                //查询
                 var index = layer.msg('查询中，请稍候...', { icon: 16, time: false, shade: 0 });
                 setTimeout(function () {
                     table.reload('table', {
@@ -72,7 +71,6 @@ layui.use(['table', 'layer', 'form'], function () {
                 break;
             case 'but_SeeRole':
                 //弹出查看角色模块
-                $("#but_add").css({ "display": "none" });
                 layer.msg('查看：' + obj.event);
                 break;
         }

@@ -2,12 +2,15 @@
 @{
     ViewData["Title"] = "角色管理";
 }
+
 <link rel="stylesheet" href="~/layui/css/layui.css">
+
 <script type="text/javascript" src="~/js/jquery.js"></script>
 <script type="text/javascript" src="~/layui/layui.js"></script>
+
 <script type="text/javascript" src="~/js/script/users/Index.js"></script>
 <script type="text/javascript" src="~/js/script/users/AddUser.js"></script>
-
+<script type="text/javascript" src="~/js/Role_but.js"></script>
 @*table表格*@
 <table class="layui-hide" id="table" lay-filter="table"></table>
 
@@ -49,7 +52,6 @@
     <hr />
     <div class="layui-btn-container">
         <button class="layui-btn layui-btn-sm" data-method="setTop" id="but_add" lay-event="but_add">添加角色</button>
-        <button class="layui-btn layui-btn-sm" id="but_SeeRole" lay-event="but_SeeRole">查看账号层级</button>
     </div>
 </script>
 @*数据操作按钮*@

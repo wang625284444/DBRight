@@ -16,7 +16,7 @@ namespace DB.Web.Controllers
         {
             return View();
         }
-        [HttpPost]
+        [HttpGet]
         public async Task<ActionResult<bool>> GetModuleButtionById(Guid guid)
         {
             var json = await _moduleButtionService.QueryById(guid);

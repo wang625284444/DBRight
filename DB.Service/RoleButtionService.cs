@@ -27,7 +27,7 @@ namespace DB.Service
         }
 
         /// <summary>
-        /// 根据session角色获取按钮关系
+        /// 角色获取按钮关系
         /// </summary>
         /// <returns>BaseResult</returns>
         public async Task<BaseResult<List<RoleButtionEntity>>> QueryByRoleListID(Guid guid, List<ModuleButtionEntity> moduleButtionList)
@@ -62,6 +62,21 @@ namespace DB.Service
             }
 
             return new BaseResult<List<RoleButtionEntity>>(roleButtionlist);
+        }
+
+        /// <summary>
+        /// 通过session获取当前页面拥有那些按钮权限
+        /// </summary>
+        /// <returns></returns>
+        public BaseResult<List<RoleButtionEntity>> QueryByRoleList(Guid guid)
+        {
+            //根据session获取用户对象
+            //var userEntity = _httpContextUtil.GetSession<UserEntity>(KeyUtil.user_info);
+            //读取Redis角色信息
+            var roleButtionlist = _redisUtil.GetTVlues<List<RoleButtionEntity>>("RoleButtion-aa9c9ee8-3f5c-445a-ad51-fad03052ef28");
+
+            var list = roleButtionlist.Where(a => a.ModuleButtion.ModuleId == guid).ToList();
+            return new BaseResult<List<RoleButtionEntity>>(list);
         }
         /// <summary>
         /// 根据角色获取权限按钮

@@ -32,7 +32,7 @@
         });
 
         function getAhtml(obj) {
-            return "<a href=\"javascript:;\" onclick=\" addTab('" + obj.title + "','" + obj.href + "')\" >" + obj.title + "</a>";
+            return "<a href=\"javascript:;\" onclick=\" addTab('" + obj.title + "','" + obj.href + "','" + obj.id + "')\" >" + obj.title + "</a>";
         }
         //动态菜单
         layui.jquery.ajax({
@@ -49,12 +49,12 @@
                     } else {
                         strli = strli + getAhtml(res[i]);
                     }
-                   
+
                     if (res[i].href === null) {
                         strli = strli + "<dl class=\"layui-nav-child\" >";
                         $.each(res[i].children, function (j, item2) {
                             strli = strli + "<dd>" + getAhtml(item2) + "</dd>";
-                           });
+                        });
                         strli = strli + "</dl>";
                     }
                     strli = strli + "</li>";
@@ -66,19 +66,19 @@
         });
 
         //添加选项卡
-        addTab = function (name, url) {
-            if (layui.jquery(".layui-tab-title li[lay-id='" + name + "']").length > 0) {
+        addTab = function (name, url, id) {
+            if (layui.jquery(".layui-tab-title li[lay-id='" + id + "']").length > 0) {
                 //选项卡已经存在
                 layui.element.tabChange('tab', name);
             } else {
                 //新增一个Tab项
                 layui.element.tabAdd('tab', {
                     title: name,
-                    content: '<iframe border="0" scrolling="auto" frameborder="0" width="100%" height="85%" src="' + url + '" ></iframe>',
-                    id: name
+                    content: '<iframe border="0" id="content_info" name="' + id + '" scrolling="auto" frameborder="0" width="100%" height="85%" src="' + url + '" ></iframe>',
+                    id: id
                 });
                 //切换刷新
-                layui.element.tabChange('tab', name);
+                layui.element.tabChange('tab', id);
             }
         };
     });

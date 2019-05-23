@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DB.Web.Controllers
@@ -52,7 +53,7 @@ namespace DB.Web.Controllers
             }
             base.OnActionExecuting(filterContext);
         }
-       
+
         /// <summary>
         /// 封装条件验证未通过的返回实体
         /// </summary>
@@ -61,10 +62,12 @@ namespace DB.Web.Controllers
         {
             return new BaseResult<bool>(800, false);
         }
+
         /// <summary>
         /// 读取用户信息
         /// </summary>
         public UserEntity GetUserSession { get; private set; }
+
         /// <summary>
         /// 登录用户session读取
         /// </summary>
@@ -86,11 +89,12 @@ namespace DB.Web.Controllers
                 return null;
             }
         }
+
         /// <summary>
         /// 获取当前登陆人角色权限关系
         /// </summary>
         public RoleButtionEntity GetRoleButtionSession { get; private set; }
-       
+
         /// <summary>
         /// 重构方法(如果给前台响应日期时间调用此方法方法)
         /// </summary>
